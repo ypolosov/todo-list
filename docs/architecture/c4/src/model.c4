@@ -1,0 +1,59 @@
+// Todo List -- C4 Model
+// Декомпозиция на контейнеры выполнена в ITER-001 (ADR-001)
+//
+// TODO (Iteration 2):
+//   - Компонентная декомпозиция React-приложения (frontend)
+//   - Определить persistence layer (storage adapter)
+
+model {
+
+  // === Actors ===
+
+  user = actor 'Пользователь' {
+    description 'Единственный пользователь приложения Todo List'
+  }
+
+  // === System Context ===
+
+  todoApp = system 'Todo List' {
+    description 'Личное приложение для управления задачами. Работает оффлайн, данные в localStorage.'
+
+    // === Containers (ITER-001, ADR-001) ===
+
+    frontend = container 'Frontend SPA' {
+      technology 'React, Vite, TypeScript'
+      description 'Single Page Application. Вся бизнес-логика, UI, state management и persistence (localStorage).'
+    }
+
+    server = container 'Static Server' {
+      technology 'Node.js, Express'
+      description 'Раздача статических файлов SPA. SPA fallback, security headers, gzip.'
+    }
+  }
+
+  // === External Systems ===
+
+  browser = externalSystem 'Web Browser' {
+    description 'Браузер пользователя. Предоставляет localStorage API для хранения данных.'
+  }
+
+  // === Relationships (System Context level) ===
+
+  user -> todoApp 'Управляет задачами'
+  todoApp -> browser 'Хранит данные в localStorage'
+
+  // === Relationships (Container level) ===
+
+  user -> server 'HTTP GET -- загрузка приложения' {
+    style sync
+  }
+
+  server -> frontend 'Отдаёт статические файлы (HTML/JS/CSS)' {
+    style sync
+  }
+
+  frontend -> browser 'localStorage API -- чтение/запись данных задач' {
+    style sync
+  }
+
+}

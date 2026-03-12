@@ -1,0 +1,64 @@
+// Todo List -- LikeC4 Specification
+// Определение типов элементов и отношений для C4-модели
+
+specification {
+
+  // ===== Element Kinds =====
+
+  element actor {
+    style {
+      shape person
+      color amber
+    }
+  }
+
+  element system {
+    style {
+      shape rectangle
+      color blue
+    }
+  }
+
+  element externalSystem {
+    style {
+      shape rectangle
+      color gray
+    }
+  }
+
+  element container {
+    style {
+      shape rectangle
+      color green
+    }
+  }
+
+  element component {
+    style {
+      shape rectangle
+      color sky
+    }
+  }
+
+  element storage {
+    style {
+      shape storage
+      color slate
+    }
+  }
+
+  // ===== Relationship Kinds =====
+
+  relationship async {
+    style {
+      line dashed
+    }
+  }
+
+  relationship sync {
+    style {
+      line solid
+    }
+  }
+
+}

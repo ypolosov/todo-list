@@ -1,0 +1,29 @@
+// Todo List -- C4 Views
+// Определение диаграмм для визуализации архитектуры
+
+views {
+
+  // === System Context View ===
+
+  view systemContext of todoApp {
+    title 'Todo List -- System Context'
+    description 'Контекстная диаграмма: пользователь, система, внешние зависимости'
+
+    include *
+  }
+
+  // === Container View (ITER-001, ADR-001) ===
+
+  view containers of todoApp {
+    title 'Todo List -- Container Diagram'
+    description 'Декомпозиция системы на контейнеры: React SPA (frontend) + Express static server'
+
+    include *
+    include user
+    include browser
+  }
+
+  // === Component View ===
+  // TODO: будет добавлен после Iteration 2 (декомпозиция frontend)
+
+}
