@@ -6,7 +6,7 @@
 | Цель дизайна      | Production development                      |
 | Контекст системы  | Greenfield (mature domain)                  |
 | Методология       | ADD 3.0 (Attribute-Driven Design)           |
-| Статус            | Initialized                                 |
+| Статус            | ITER-002 Completed                          |
 | Дата создания     | 2026-03-12                                  |
 
 ## Project Context
@@ -39,7 +39,7 @@
 
 | ID      | Название                                | Статус |
 |---------|-----------------------------------------|--------|
-| CRN-001 | React + бэкенд при оффлайн-режиме      | Open   |
+| CRN-001 | React + бэкенд при оффлайн-режиме      | Resolved (ADR-001) |
 
 ## Design Goals
 
@@ -72,11 +72,10 @@
 
 ## ADD 3.0 Iteration Roadmap
 
-Итерации ещё не начаты. Предварительный план:
-
-1. **Iteration 1** -- Общая структура системы: разрешение CRN-001,
-   выбор reference architecture, определение контейнеров
-2. **Iteration 2** -- Декомпозиция frontend: компонентная модель React,
-   state management, persistence layer
-3. **Iteration 3** -- Детализация: UX-flows для UC-001/002/003,
-   deployment strategy
+1. **Iteration 1** (Completed) -- Общая структура системы: разрешение CRN-001,
+   выбор reference architecture, определение контейнеров. [ITER-001](iterations/ITER-001.md)
+2. **Iteration 2** (Completed) -- Декомпозиция frontend: layered architecture,
+   компонентная модель React, Repository pattern для persistence.
+   [ITER-002](iterations/ITER-002.md)
+3. **Iteration 3** (Planned) -- Детализация: deployment view, UX-flows,
+   error handling, performance budget

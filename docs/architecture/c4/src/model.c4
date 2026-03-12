@@ -1,9 +1,6 @@
 // Todo List -- C4 Model
-// Декомпозиция на контейнеры выполнена в ITER-001 (ADR-001)
-//
-// TODO (Iteration 2):
-//   - Компонентная декомпозиция React-приложения (frontend)
-//   - Определить persistence layer (storage adapter)
+// Декомпозиция на контейнеры: ITER-001 (ADR-001)
+// Компонентная декомпозиция frontend: ITER-002 (ADR-002)
 
 model {
 
@@ -22,7 +19,82 @@ model {
 
     frontend = container 'Frontend SPA' {
       technology 'React, Vite, TypeScript'
-      description 'Single Page Application. Вся бизнес-логика, UI, state management и persistence (localStorage).'
+      description 'Single Page Application. Layered architecture: UI, Application, Domain, Infrastructure.'
+
+      // === Components (ITER-002, ADR-002) ===
+
+      // -- UI Layer --
+
+      layout = component 'Layout' {
+        technology 'React TSX'
+        description 'Корневая структура страницы: заголовок, основная область, размещение дочерних компонентов.'
+      }
+
+      todoForm = component 'TodoForm' {
+        technology 'React TSX'
+        description 'Форма создания и редактирования задачи: ввод текста, выбор категории, подтверждение.'
+      }
+
+      todoList = component 'TodoList' {
+        technology 'React TSX'
+        description 'Отображение списка задач. Делегирует рендеринг отдельных задач компоненту TodoItem.'
+      }
+
+      todoItem = component 'TodoItem' {
+        technology 'React TSX'
+        description 'Отображение одной задачи: название, категория, статус, кнопки действий (toggle, edit, delete).'
+      }
+
+      searchBar = component 'SearchBar' {
+        technology 'React TSX'
+        description 'Поле текстового поиска задач с real-time фильтрацией.'
+      }
+
+      categoryFilter = component 'CategoryFilter' {
+        technology 'React TSX'
+        description 'Элементы управления фильтрами по категории (Все/Работа/Дом) и статусу (Все/Активные/Выполненные).'
+      }
+
+      // -- Application Layer --
+
+      useTodos = component 'useTodos' {
+        technology 'React Hook, TypeScript'
+        description 'Координация CRUD-операций, управление состоянием списка задач, обеспечение персистентности.'
+      }
+
+      useSearch = component 'useSearch' {
+        technology 'React Hook, TypeScript'
+        description 'Управление строкой поиска и фильтрация задач по тексту.'
+      }
+
+      useFilter = component 'useFilter' {
+        technology 'React Hook, TypeScript'
+        description 'Управление фильтрами по категории и статусу выполнения.'
+      }
+
+      // -- Domain Layer --
+
+      todoModel = component 'Todo Model' {
+        technology 'TypeScript'
+        description 'Определение структуры задачи (Todo interface) и связанных типов (Category, StatusFilter).'
+      }
+
+      todoService = component 'TodoService' {
+        technology 'TypeScript, pure functions'
+        description 'Бизнес-логика: создание задач, валидация, фильтрация по тексту/статусу/категории, комбинированная фильтрация.'
+      }
+
+      // -- Infrastructure Layer --
+
+      todoRepository = component 'TodoRepository' {
+        technology 'TypeScript interface'
+        description 'Контракт persistence: getAll(): Todo[], save(todos: Todo[]): void. Абстракция для QA-M2.'
+      }
+
+      localStorageRepo = component 'LocalStorageRepository' {
+        technology 'TypeScript, localStorage API'
+        description 'Реализация TodoRepository через localStorage. Сериализация/десериализация JSON, обработка ошибок.'
+      }
     }
 
     server = container 'Static Server' {
@@ -55,5 +127,41 @@ model {
   frontend -> browser 'localStorage API -- чтение/запись данных задач' {
     style sync
   }
+
+  // === Relationships (Component level, ITER-002) ===
+
+  // UI Layer -> Application Layer
+  todoForm -> useTodos 'addTodo, updateTodo'
+  todoItem -> useTodos 'toggleTodo, deleteTodo'
+  todoList -> useTodos 'todos (filtered list)'
+  searchBar -> useSearch 'searchQuery, setSearchQuery'
+  categoryFilter -> useFilter 'filters, setters'
+
+  // UI composition
+  layout -> todoForm 'renders'
+  layout -> searchBar 'renders'
+  layout -> categoryFilter 'renders'
+  layout -> todoList 'renders'
+  todoList -> todoItem 'renders each'
+
+  // Application Layer -> Domain Layer
+  useTodos -> todoService 'createTodo, validateTodo'
+  useSearch -> todoService 'filterByText'
+  useFilter -> todoService 'filterByStatus, filterByCategory'
+
+  // Application Layer -> Infrastructure Layer
+  useTodos -> todoRepository 'getAll, save'
+
+  // Infrastructure: interface -> implementation
+  todoRepository -> localStorageRepo 'implements'
+
+  // Infrastructure -> External
+  localStorageRepo -> browser 'localStorage.getItem/setItem' {
+    style sync
+  }
+
+  // Domain dependencies
+  todoService -> todoModel 'uses types'
+  todoRepository -> todoModel 'uses types'
 
 }

@@ -23,7 +23,14 @@ views {
     include browser
   }
 
-  // === Component View ===
-  // TODO: будет добавлен после Iteration 2 (декомпозиция frontend)
+  // === Component View (ITER-002, ADR-002) ===
+
+  view components of frontend {
+    title 'Frontend SPA -- Component Diagram'
+    description 'Layered architecture: UI Layer (React components) -> Application Layer (hooks) -> Domain Layer (pure logic) -> Infrastructure Layer (localStorage adapter)'
+
+    include *
+    include browser
+  }
 
 }
