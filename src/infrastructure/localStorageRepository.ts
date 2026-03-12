@@ -1,5 +1,5 @@
 import type { Todo } from '../domain/todo';
-import type { TodoRepository } from './todoRepository';
+import type { TodoRepository } from '../domain/todoRepository';
 
 const STORAGE_KEY = 'todo-list-data';
 

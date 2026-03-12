@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Category, Todo } from '../domain/todo';
+import { CATEGORIES, CATEGORY_LABELS, isCategory } from '../domain/todo';
 
 interface Props {
   todo: Todo;
@@ -7,11 +8,6 @@ interface Props {
   onDelete: (id: string) => void;
   onUpdate: (id: string, updates: Partial<Pick<Todo, 'title' | 'category'>>) => void;
 }
-
-const CATEGORY_LABELS: Record<Category, string> = {
-  work: 'Работа',
-  home: 'Дом',
-};
 
 export function TodoItem({ todo, onToggle, onDelete, onUpdate }: Props) {
   const [editing, setEditing] = useState(false);
@@ -49,10 +45,13 @@ export function TodoItem({ todo, onToggle, onDelete, onUpdate }: Props) {
         <select
           className="category-select"
           value={editCategory}
-          onChange={(e) => setEditCategory(e.target.value as Category)}
+          onChange={(e) => {
+            if (isCategory(e.target.value)) setEditCategory(e.target.value);
+          }}
         >
-          <option value="work">Работа</option>
-          <option value="home">Дом</option>
+          {CATEGORIES.map((c) => (
+            <option key={c} value={c}>{CATEGORY_LABELS[c]}</option>
+          ))}
         </select>
         <button className="btn btn-save" onClick={handleSave}>Сохранить</button>
         <button className="btn btn-cancel" onClick={handleCancel}>Отмена</button>
