@@ -52,7 +52,7 @@ model {
 
       categoryFilter = component 'CategoryFilter' {
         technology 'React TSX'
-        description 'Элементы управления фильтрами по категории (Все/Работа/Дом) и статусу (Все/Активные/Выполненные).'
+        description 'Элементы управления фильтрами по категории и статусу.'
       }
 
       // -- Application Layer --
@@ -81,32 +81,32 @@ model {
 
       todoService = component 'TodoService' {
         technology 'TypeScript, pure functions'
-        description 'Бизнес-логика: создание задач, валидация, фильтрация по тексту/статусу/категории, комбинированная фильтрация.'
+        description 'Бизнес-логика: создание задач, валидация, фильтрация.'
       }
 
       // -- Infrastructure Layer --
 
       todoRepository = component 'TodoRepository' {
         technology 'TypeScript interface'
-        description 'Контракт persistence: getAll(): Todo[], save(todos: Todo[]): void. Абстракция для QA-M2.'
+        description 'Контракт persistence: getAll(), save(). Абстракция для QA-M2.'
       }
 
       localStorageRepo = component 'LocalStorageRepository' {
         technology 'TypeScript, localStorage API'
-        description 'Реализация TodoRepository через localStorage. Сериализация/десериализация JSON, обработка ошибок.'
+        description 'Реализация TodoRepository через localStorage.'
       }
     }
 
     server = container 'Static Server' {
       technology 'Node.js, Express'
-      description 'Раздача статических файлов SPA. SPA fallback, security headers, gzip.'
+      description 'Раздача статических файлов SPA. SPA fallback.'
     }
   }
 
   // === External Systems ===
 
   browser = externalSystem 'Web Browser' {
-    description 'Браузер пользователя. Предоставляет localStorage API для хранения данных.'
+    description 'Браузер пользователя. Предоставляет localStorage API.'
   }
 
   // === Relationships (System Context level) ===
@@ -116,24 +116,16 @@ model {
 
   // === Relationships (Container level) ===
 
-  user -> server 'HTTP GET -- загрузка приложения' {
-    style sync
-  }
-
-  server -> frontend 'Отдаёт статические файлы (HTML/JS/CSS)' {
-    style sync
-  }
-
-  frontend -> browser 'localStorage API -- чтение/запись данных задач' {
-    style sync
-  }
+  user -[sync]-> server 'HTTP GET — загрузка приложения'
+  server -[sync]-> frontend 'Отдаёт статические файлы'
+  frontend -[sync]-> browser 'localStorage API'
 
   // === Relationships (Component level, ITER-002) ===
 
   // UI Layer -> Application Layer
   todoForm -> useTodos 'addTodo, updateTodo'
   todoItem -> useTodos 'toggleTodo, deleteTodo'
-  todoList -> useTodos 'todos (filtered list)'
+  todoList -> useTodos 'todos'
   searchBar -> useSearch 'searchQuery, setSearchQuery'
   categoryFilter -> useFilter 'filters, setters'
 
@@ -152,13 +144,9 @@ model {
   // Application Layer -> Infrastructure Layer
   useTodos -> todoRepository 'getAll, save'
 
-  // Infrastructure: interface -> implementation
+  // Infrastructure
   todoRepository -> localStorageRepo 'implements'
-
-  // Infrastructure -> External
-  localStorageRepo -> browser 'localStorage.getItem/setItem' {
-    style sync
-  }
+  localStorageRepo -[sync]-> browser 'localStorage.getItem/setItem'
 
   // Domain dependencies
   todoService -> todoModel 'uses types'
