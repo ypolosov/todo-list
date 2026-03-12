@@ -1,12 +1,11 @@
 // Todo List -- C4 Views
-// Определение диаграмм для визуализации архитектуры
 
 views {
 
   // === System Context View ===
 
   view systemContext of todoApp {
-    title 'Todo List -- System Context'
+    title 'Todo List — System Context'
     description 'Контекстная диаграмма: пользователь, система, внешние зависимости'
 
     include *
@@ -15,8 +14,8 @@ views {
   // === Container View (ITER-001, ADR-001) ===
 
   view containers of todoApp {
-    title 'Todo List -- Container Diagram'
-    description 'Декомпозиция системы на контейнеры: React SPA (frontend) + Express static server'
+    title 'Todo List — Container Diagram'
+    description 'Декомпозиция системы на контейнеры: React SPA + Express static server'
 
     include *
     include user
@@ -25,9 +24,9 @@ views {
 
   // === Component View (ITER-002, ADR-002) ===
 
-  view components of frontend {
-    title 'Frontend SPA -- Component Diagram'
-    description 'Layered architecture: UI Layer (React components) -> Application Layer (hooks) -> Domain Layer (pure logic) -> Infrastructure Layer (localStorage adapter)'
+  view components of todoApp.frontend {
+    title 'Frontend SPA — Component Diagram'
+    description 'Layered architecture: UI -> Application -> Domain -> Infrastructure'
 
     include *
     include browser
