@@ -14,10 +14,10 @@ updated: 2026-04-19
 
 | Альфа | Состояние | Артефакт-свидетельство | Дата |
 |---|---|---|---|
-| Opportunity | Value Established | `.claude/sdlc/phases/vision/vision.md` | 2026-04-19 |
+| Opportunity | Addressed | `.claude/sdlc/phases/operations/operations.md` | 2026-04-19 |
 | Stakeholders | Involved | `.claude/sdlc/phases/requirements/requirements.md` | 2026-04-19 |
 | Requirements | Acceptable | `.claude/sdlc/phases/testing/testing.md` | 2026-04-19 |
-| Software System | Operational | GitHub Actions run 24626510735 (deploy) | 2026-04-19 |
+| Software System | Operational | `.claude/sdlc/phases/operations/operations.md` | 2026-04-19 |
 | Work | Under Control | `.claude/sdlc/phases/development/development.md` | 2026-04-19 |
 | Team | Formed | `.claude/sdlc/roles.md` | 2026-04-19 |
 | Way of Working | Foundation Established | `.claude/sdlc/profile.md` | 2026-04-19 |
@@ -107,6 +107,19 @@ updated: 2026-04-19
   - Свидетельство: GitHub Actions run 24626510735 (deploy) — completed success, 2026-04-19T10:03:32Z.
   - Роль: developer. Метод: continuous-delivery + github-pages-via-actions.
   - Причина: приложение развёрнуто на GitHub Pages и работает в реальной среде.
+
+### 2026-04-19 — Фаза Operations
+
+- **Opportunity**: Value Established → Addressed (skip: Viable).
+  - Артефакт: `.claude/sdlc/phases/operations/operations.md`.
+  - Свидетельство: продукт развёрнут и используется автором; цикл обратной связи описан.
+  - Роль: developer (совмещает sre и product-owner). Метод: site-reliability-engineering + manual-ops-playbook.
+  - Причина: возможность адресована работающим решением для автора-пользователя.
+  - Обоснование skip: pet-масштаб, один пользователь; решение доступно и работает.
+  - Примечание: Benefit Accrued откладывается до накопления метрики ценности через время использования.
+- **Software System**: остаётся Operational.
+  - Артефакт: `.claude/sdlc/phases/operations/operations.md`.
+  - Причина: состояние подтверждено фазой Operations; система в эксплуатации.
 
 ## Правила
 

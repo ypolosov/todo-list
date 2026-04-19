@@ -303,6 +303,34 @@ updated: 2026-04-19
 - rationale: явный выбор пользователя; обратимо, ~2 минуты до выката.
 - traces_to: [`.claude/sdlc/phases/deployment/deployment.md`]
 
+## 2026-04-19 12:20 — Наблюдаемость и обратная связь
+
+- context: продукт в Operational; нужна минимальная ops-модель.
+- autonomy_mode: hitl
+- phase: operations
+- role: developer
+- alternatives:
+  1. Ручная проверка URL + GitHub Issues как канал обратной связи.
+  2. UptimeRobot / cron-ping + email alert.
+  3. Pingdom + аналитика (Plausible/GA) + дашборд.
+- choice: 1
+- rationale: явный выбор пользователя; нет внешних зависимостей; pet-масштаб.
+- traces_to: [`.claude/sdlc/phases/operations/operations.md`]
+
+## 2026-04-19 12:21 — Реакция на инциденты
+
+- context: нужен процесс отката и фиксации инцидентов.
+- autonomy_mode: hitl
+- phase: operations
+- role: developer
+- alternatives:
+  1. Revert + 1-строчный postmortem в `decisions.md`.
+  2. Отдельный артефакт на каждый инцидент (timeline, 5-whys).
+  3. Fix-forward без записей.
+- choice: 1
+- rationale: явный выбор пользователя; лёгкая трассируемость без формализма.
+- traces_to: [`.claude/sdlc/phases/operations/operations.md`]
+
 ## Правила
 
 - Минимум 2 альтернативы; оптимально 3.

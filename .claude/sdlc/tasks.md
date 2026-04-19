@@ -16,9 +16,10 @@ _пока нет_
 
 ## Ожидающие задачи
 
-- Запустить `/sdlc-phase operations` для эксплуатации.
+- Эксплуатация: ручная проверка URL после каждого merge.
 - Опционально: `npx playwright install chromium` + локальный прогон E2E.
 - Опционально: добавить E2E в CI после установки браузеров.
+- Через время использования — продвинуть Opportunity до Benefit Accrued.
 
 ## Завершённые задачи
 
@@ -71,6 +72,13 @@ _пока нет_
 - Сборка `VITE_BASE=/todo-list/ npm run build` успешна.
 - Rollback: `git revert` + авто-передеплой.
 - Прод-прогон: GitHub Actions deploy run 24626510735 — success 2026-04-19.
+
+### 2026-04-19 — Фаза Operations
+- Артефакт: `.claude/sdlc/phases/operations/operations.md`.
+- Opportunity: Value Established → Addressed (skip: Viable).
+- Наблюдаемость: ручная проверка URL; прогоны CI/deploy как косвенный сигнал.
+- Обратная связь: GitHub Issues.
+- Инцидент-плейбук: revert + 1-строчный postmortem в decisions.md.
 
 ## Правила
 
