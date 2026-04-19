@@ -15,8 +15,8 @@ updated: 2026-04-19
 | Альфа | Состояние | Артефакт-свидетельство | Дата |
 |---|---|---|---|
 | Opportunity | Value Established | `.claude/sdlc/phases/vision/vision.md` | 2026-04-19 |
-| Stakeholders | Represented | `.claude/sdlc/phases/vision/vision.md` | 2026-04-19 |
-| Requirements | Conceived | — | 2026-04-19 |
+| Stakeholders | Involved | `.claude/sdlc/phases/requirements/requirements.md` | 2026-04-19 |
+| Requirements | Bounded | `.claude/sdlc/phases/requirements/requirements.md` | 2026-04-19 |
 | Software System | — | — | 2026-04-19 |
 | Work | Initiated | `.claude/sdlc/tasks.md` | 2026-04-19 |
 | Team | Formed | `.claude/sdlc/roles.md` | 2026-04-19 |
@@ -49,6 +49,17 @@ updated: 2026-04-19
   - Артефакт: `.claude/sdlc/phases/vision/vision.md`.
   - Роль: product-owner. Метод: product-discovery + mission-statement.
   - Причина: единственный стейкхолдер назван и представлен в миссии.
+
+### 2026-04-19 — Фаза Requirements
+
+- **Requirements**: Conceived → Bounded.
+  - Артефакт: `.claude/sdlc/phases/requirements/requirements.md`.
+  - Роль: product-owner. Метод: requirements-engineering + feature-list-with-acceptance.
+  - Причина: 5 фич с критериями готовности зафиксированы; не-требования перечислены.
+- **Stakeholders**: Represented → Involved.
+  - Артефакт: `.claude/sdlc/phases/requirements/requirements.md`.
+  - Роль: product-owner. Метод: requirements-engineering + feature-list-with-acceptance.
+  - Причина: стейкхолдер вовлечён в определение MVP и его интересы зафиксированы.
 
 ## Правила
 

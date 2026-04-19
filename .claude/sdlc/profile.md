@@ -4,7 +4,7 @@ type: sdlc-profile
 project: todo-list
 created: 2026-04-19
 updated: 2026-04-19
-active_phase: vision
+active_phase: requirements
 ---
 
 # SME-профиль проекта todo-list
@@ -17,7 +17,7 @@ active_phase: vision
 | Фаза | Уровень SME | Выбранный метод | Выбранный инструмент | default_autonomy |
 |---|---|---|---|---|
 | vision | pet | product-discovery | mission-statement | hitl |
-| requirements | pet | не выбрано | не выбрано | hitl |
+| requirements | pet | requirements-engineering | feature-list-with-acceptance | hitl |
 | architecture | pet | не выбрано | не выбрано | hitl |
 | development | pet | не выбрано | не выбрано | hitl |
 | testing | pet | не выбрано | не выбрано | hitl |
@@ -38,6 +38,7 @@ active_phase: vision
 |---|---|---|---|---|
 | 2026-04-19 | все | — | pet (ориентир) | bootstrap проекта pet-масштаба |
 | 2026-04-19 | vision | не выбрано | product-discovery + mission-statement | подтверждено в опросе фазы vision |
+| 2026-04-19 | requirements | не выбрано | requirements-engineering + feature-list-with-acceptance | выбран формат pet: компактный список фич |
 
 ## Правила
 

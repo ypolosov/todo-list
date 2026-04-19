@@ -107,6 +107,34 @@ updated: 2026-04-19
 - rationale: явно выбран пользователем; честно отражает мотивацию.
 - traces_to: [`.claude/sdlc/phases/vision/vision.md`]
 
+## 2026-04-19 10:30 — SME для фазы requirements
+
+- context: вход в фазу requirements; выбор формы артефакта.
+- autonomy_mode: hitl
+- phase: requirements
+- role: product-owner
+- alternatives:
+  1. pet + список фич с критериями — компактно, минимум формальности.
+  2. mid + user stories с acceptance criteria — стандартный шаблон, больше структуры.
+  3. mid + use cases — сценарии взаимодействия по шагам.
+- choice: 1
+- rationale: pet-масштаб; простой табличный формат соответствует нагрузке.
+- traces_to: [`.claude/sdlc/phases/requirements/requirements.md`, `.claude/sdlc/profile.md`]
+
+## 2026-04-19 10:31 — Объём MVP
+
+- context: нужно зафиксировать границы MVP до архитектуры.
+- autonomy_mode: hitl
+- phase: requirements
+- role: product-owner
+- alternatives:
+  1. CRUD-минимум — добавить / отметить выполненной / удалить.
+  2. CRUD + фильтр по статусу (активные / выполненные / все).
+  3. CRUD + фильтр + приоритет / дедлайн.
+- choice: 2
+- rationale: фильтр дёшев и добавляет ценность; приоритеты отложены.
+- traces_to: [`.claude/sdlc/phases/requirements/requirements.md`]
+
 ## Правила
 
 - Минимум 2 альтернативы; оптимально 3.
