@@ -22,44 +22,60 @@ state_artifact:
 
 ## tdd_scope
 
-Область TDD будет уточнена на фазе development.
-На старте пустая: до выбора стека технологии неизвестны.
+Область TDD — исходники приложения.
+Исключаются типы и точка входа.
 
 ```yaml
 tdd_scope:
-  include: []
-  exclude: []
+  include: ['src/**']
+  exclude: ['src/**/*.test.ts', 'src/**/*.test.tsx', 'src/**/*.d.ts', 'src/main.tsx', 'src/vite-env.d.ts', 'src/test-setup.ts']
 ```
 
 ## tdd_pairs
 
-Пары source↔test определяются на фазе development.
-До выбора стека TDD hook пропускает правки с предупреждением.
+Пары source↔test: co-located в том же каталоге.
 
 ```yaml
-tdd_pairs: []
+tdd_pairs:
+  - source: 'src/(.+)\.ts$'
+    test:   'src/\1.test.ts'
+  - source: 'src/(.+)\.tsx$'
+    test:   'src/\1.test.tsx'
 ```
 
 ## formatter
 
-Команда форматера задаётся на фазе development.
+Prettier как форматер для TS/TSX/CSS/MD.
 
 ```yaml
 formatter:
-  command: ""
+  command: 'npx prettier --write'
   exit_code_ok: 0
-  scope_globs: []
+  scope_globs: ['src/**/*.{ts,tsx,css}', '*.md', '.claude/sdlc/**/*.md']
 ```
 
 ## linter
 
-Команда линтера задаётся на фазе development.
+ESLint с конфигом React + TS.
 
 ```yaml
 linter:
-  command: ""
+  command: 'npx eslint'
   exit_code_ok: 0
-  scope_globs: []
+  scope_globs: ['src/**/*.{ts,tsx}']
+```
+
+## coverage_gate
+
+Порог 100 % только для domain и application слоёв.
+
+```yaml
+coverage_gate:
+  command: 'npx vitest run --coverage'
+  thresholds:
+    'src/domain/**': 100
+    'src/application/**': 100
+  exit_code_ok: 0
 ```
 
 ## no_comments_whitelist

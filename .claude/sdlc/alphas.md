@@ -7,6 +7,7 @@ updated: 2026-04-19
 
 # Журнал состояний альф todo-list
 
+
 Единственный источник истины — агент `sdlc-alpha-tracker`.
 Другие агенты читают состояния только через трекер.
 
@@ -16,9 +17,9 @@ updated: 2026-04-19
 |---|---|---|---|
 | Opportunity | Value Established | `.claude/sdlc/phases/vision/vision.md` | 2026-04-19 |
 | Stakeholders | Involved | `.claude/sdlc/phases/requirements/requirements.md` | 2026-04-19 |
-| Requirements | Bounded | `.claude/sdlc/phases/requirements/requirements.md` | 2026-04-19 |
-| Software System | — | — | 2026-04-19 |
-| Work | Initiated | `.claude/sdlc/tasks.md` | 2026-04-19 |
+| Requirements | Acceptable | `.claude/sdlc/phases/testing/testing.md` | 2026-04-19 |
+| Software System | Demonstrable | `.claude/sdlc/phases/development/development.md` | 2026-04-19 |
+| Work | Under Control | `.claude/sdlc/phases/development/development.md` | 2026-04-19 |
 | Team | Formed | `.claude/sdlc/roles.md` | 2026-04-19 |
 | Way of Working | Foundation Established | `.claude/sdlc/profile.md` | 2026-04-19 |
 
@@ -60,6 +61,38 @@ updated: 2026-04-19
   - Артефакт: `.claude/sdlc/phases/requirements/requirements.md`.
   - Роль: product-owner. Метод: requirements-engineering + feature-list-with-acceptance.
   - Причина: стейкхолдер вовлечён в определение MVP и его интересы зафиксированы.
+
+### 2026-04-19 — Фаза Architecture
+
+- **Software System**: — → Architecture Selected.
+  - Артефакт: `.claude/sdlc/phases/architecture/architecture.md`.
+  - Роль: product-owner (совмещает architect на pet-масштабе). Метод: software-architecture + structure-sketch.
+  - Причина: значимые решения A-01…A-05 зафиксированы; декомпозиция на domain/application/adapters; направление зависимостей определено; NFR названы.
+- **Requirements**: Bounded → Coherent.
+  - Артефакт: `.claude/sdlc/phases/architecture/architecture.md`.
+  - Роль: product-owner. Метод: software-architecture + structure-sketch.
+  - Причина: NFR уточнены (простота, целостность, проверяемость); функциональная декомпозиция согласована с F-01…F-05.
+  - Примечание: продвижение до Acceptable отложено до фазы Testing, где будет выполнена валидация критериев приёмки.
+
+### 2026-04-19 — Фаза Testing
+
+- **Requirements**: Coherent → Acceptable.
+  - Артефакт: `.claude/sdlc/phases/testing/testing.md`.
+  - Роль: developer. Метод: software-testing + test-strategy-pet.
+  - Причина: каждая фича F-01…F-05 имеет acceptance-контракт; пирамида тестов и coverage-gate определены.
+  - Примечание: Software System остаётся Architecture Selected до появления кода в фазе development.
+
+### 2026-04-19 — Фаза Development
+
+- **Software System**: Architecture Selected → Demonstrable.
+  - Артефакт: `.claude/sdlc/phases/development/development.md`.
+  - Роль: developer. Метод: software-construction + tdd-first-react-spa.
+  - Причина: код всех слоёв написан; 62 теста зелёные; покрытие domain/application 100%.
+  - Примечание: продвижение до Usable отложено до фазы Deployment, где пройдёт E2E в браузере.
+- **Work**: Initiated → Under Control (skip: Prepared, Started).
+  - Артефакт: `.claude/sdlc/phases/development/development.md`.
+  - Роль: developer. Метод: software-construction + tdd-first-react-spa.
+  - Причина: фазы пройдены последовательно; TDD-протокол соблюдён; метрики пробега зафиксированы.
 
 ## Правила
 

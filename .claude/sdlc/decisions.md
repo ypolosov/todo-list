@@ -135,6 +135,132 @@ updated: 2026-04-19
 - rationale: фильтр дёшев и добавляет ценность; приоритеты отложены.
 - traces_to: [`.claude/sdlc/phases/requirements/requirements.md`]
 
+## 2026-04-19 10:40 — Технологический стек
+
+- context: выбор стека до архитектурной декомпозиции.
+- autonomy_mode: hitl
+- phase: architecture
+- role: product-owner
+- alternatives:
+  1. CLI на Python — нулевой порог, JSON-хранилище.
+  2. Web SPA (React + localStorage) — без бэкенда, браузер везде.
+  3. CLI на Go — один бинарь, кросс-платформенно.
+- choice: 2
+- rationale: явный выбор пользователя; SPA даёт простую развёртку.
+- traces_to: [`.claude/sdlc/phases/architecture/architecture.md`]
+
+## 2026-04-19 10:41 — Архитектурный стиль
+
+- context: определить стиль до реализации.
+- autonomy_mode: hitl
+- phase: architecture
+- role: product-owner
+- alternatives:
+  1. Без стиля (вся логика в компонентах React).
+  2. Слоистая архитектура (view/controller/data).
+  3. Модульный монолит + hexagonal + DDD-lite.
+- choice: 3
+- rationale: явный выбор пользователя; чистые границы domain от UI и storage.
+- traces_to: [`.claude/sdlc/phases/architecture/architecture.md`]
+
+## 2026-04-19 10:42 — Качественные атрибуты
+
+- context: критичные NFR для pet-приложения.
+- autonomy_mode: hitl
+- phase: architecture
+- role: product-owner
+- alternatives:
+  1. Простота + целостность данных — основное для личного инструмента.
+  2. Скорость и отклик — оптимизация под большие списки.
+  3. Расширяемость — приоритет гибкости над простотой.
+- choice: 1
+- rationale: явный выбор пользователя; целостность блокирует потерю задач.
+- traces_to: [`.claude/sdlc/phases/architecture/architecture.md`]
+
+## 2026-04-19 10:50 — Смена роли для реализации
+
+- context: архитектура готова; требуется роль для testing/development.
+- autonomy_mode: hitl
+- phase: cross-cutting
+- role: product-owner
+- alternatives:
+  1. Добавить developer + tester, запустить `/sdlc-phase testing` (TDD-first).
+  2. Добавить developer, сразу `/sdlc-phase development` (нарушает TDD-first).
+  3. Остаться product-owner, `/sdlc-focus` на подсистему.
+- choice: 1
+- rationale: принцип 5 TDD-first; pet-масштаб допускает совмещение ролей.
+- traces_to: [`.claude/sdlc/roles.md`]
+
+## 2026-04-19 11:00 — Стратегия тестирования
+
+- context: TDD-first вход; нужна пирамида тестов и инструменты.
+- autonomy_mode: hitl
+- phase: testing
+- role: developer
+- alternatives:
+  1. Только unit на domain/application — быстро, но без UI-проверки.
+  2. Domain unit + smoke E2E — баланс цены и доверия.
+  3. Только E2E через браузер — дорого, медленно, слабая изоляция.
+- choice: 2
+- rationale: domain изолирован, E2E покрывает сквозной сценарий.
+- traces_to: [`.claude/sdlc/phases/testing/testing.md`, `.claude/sdlc/plugin-config.md`]
+
+## 2026-04-19 11:01 — Инструменты тестирования
+
+- context: стек React+TS; выбор runner и E2E.
+- autonomy_mode: hitl
+- phase: testing
+- role: developer
+- alternatives:
+  1. Vitest + React Testing Library + Playwright.
+  2. Jest + React Testing Library + Cypress.
+  3. Playwright component + E2E как единый инструмент.
+- choice: 1
+- rationale: Vitest нативен для Vite-стека; быстрый запуск.
+- traces_to: [`.claude/sdlc/phases/testing/testing.md`, `.claude/sdlc/plugin-config.md`]
+
+## 2026-04-19 11:02 — Coverage-gate
+
+- context: гранулярность порога покрытия.
+- autonomy_mode: hitl
+- phase: testing
+- role: developer
+- alternatives:
+  1. Нет порога — метрика только для сведения.
+  2. Domain/application 100 %; адаптеры без порога.
+  3. Весь проект ≥ 80 %.
+- choice: 2
+- rationale: domain и application чисто тестируются; UI/storage — интеграционно.
+- traces_to: [`.claude/sdlc/plugin-config.md`]
+
+## 2026-04-19 11:30 — Bundler и package manager
+
+- context: нужны build-tool и менеджер пакетов.
+- autonomy_mode: hitl
+- phase: development
+- role: developer
+- alternatives:
+  1. Vite + npm — современный, нативен для Vitest.
+  2. CRA + npm — устаревший и деприкацирован.
+  3. Next.js + npm — избыточно для статичной SPA.
+- choice: 1
+- rationale: явный выбор пользователя; Vite + Vitest дают единый stack.
+- traces_to: [`package.json`, `vite.config.ts`]
+
+## 2026-04-19 11:31 — TDD-цикл
+
+- context: как организовать прогон тесты→код.
+- autonomy_mode: hitl
+- phase: development
+- role: developer
+- alternatives:
+  1. Red-Green-Refactor по фиче — канонический TDD.
+  2. Test-first по слою — все тесты слоя, затем весь код слоя.
+  3. Batch: все тесты → весь код.
+- choice: 1
+- rationale: явный выбор пользователя; короткие циклы дают быструю обратную связь.
+- traces_to: [`.claude/sdlc/phases/development/development.md`]
+
 ## Правила
 
 - Минимум 2 альтернативы; оптимально 3.

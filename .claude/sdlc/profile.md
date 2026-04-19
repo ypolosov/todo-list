@@ -4,7 +4,7 @@ type: sdlc-profile
 project: todo-list
 created: 2026-04-19
 updated: 2026-04-19
-active_phase: requirements
+active_phase: development
 ---
 
 # SME-профиль проекта todo-list
@@ -18,9 +18,9 @@ active_phase: requirements
 |---|---|---|---|---|
 | vision | pet | product-discovery | mission-statement | hitl |
 | requirements | pet | requirements-engineering | feature-list-with-acceptance | hitl |
-| architecture | pet | не выбрано | не выбрано | hitl |
-| development | pet | не выбрано | не выбрано | hitl |
-| testing | pet | не выбрано | не выбрано | hitl |
+| architecture | pet | software-architecture | structure-sketch | hitl |
+| development | pet | software-construction | tdd-first-react-spa | hitl |
+| testing | pet | software-testing | test-strategy-pet | hitl |
 | deployment | pet | не выбрано | не выбрано | hitl |
 | operations | pet | не выбрано | не выбрано | hitl |
 
@@ -39,6 +39,9 @@ active_phase: requirements
 | 2026-04-19 | все | — | pet (ориентир) | bootstrap проекта pet-масштаба |
 | 2026-04-19 | vision | не выбрано | product-discovery + mission-statement | подтверждено в опросе фазы vision |
 | 2026-04-19 | requirements | не выбрано | requirements-engineering + feature-list-with-acceptance | выбран формат pet: компактный список фич |
+| 2026-04-19 | architecture | не выбрано | software-architecture + structure-sketch | pet-эскиз; стек React+localStorage; hexagonal + DDD-lite |
+| 2026-04-19 | testing | не выбрано | software-testing + test-strategy-pet | Vitest + RTL + Playwright; coverage 100% на domain/application |
+| 2026-04-19 | development | не выбрано | software-construction + tdd-first-react-spa | Vite + React + TS + npm; Red-Green-Refactor |
 
 ## Правила
 
