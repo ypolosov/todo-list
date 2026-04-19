@@ -16,10 +16,9 @@ _пока нет_
 
 ## Ожидающие задачи
 
-- Push в `main` для первого прогона `deploy.yml` (Software System → Operational).
-- Включить GitHub Pages в настройках репозитория (Source: GitHub Actions).
-- Запустить `/sdlc-phase operations` после успешного деплоя.
+- Запустить `/sdlc-phase operations` для эксплуатации.
 - Опционально: `npx playwright install chromium` + локальный прогон E2E.
+- Опционально: добавить E2E в CI после установки браузеров.
 
 ## Завершённые задачи
 
@@ -66,11 +65,12 @@ _пока нет_
 
 ### 2026-04-19 — Фаза Deployment
 - Артефакт: `.claude/sdlc/phases/deployment/deployment.md`.
-- Software System: Demonstrable → Ready.
+- Software System: Demonstrable → Ready → Operational.
 - Workflows: `.github/workflows/ci.yml`, `.github/workflows/deploy.yml`.
 - Среда: GitHub Pages (`https://ypolosov.github.io/todo-list/`).
 - Сборка `VITE_BASE=/todo-list/ npm run build` успешна.
 - Rollback: `git revert` + авто-передеплой.
+- Прод-прогон: GitHub Actions deploy run 24626510735 — success 2026-04-19.
 
 ## Правила
 
