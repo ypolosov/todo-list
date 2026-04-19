@@ -3,7 +3,6 @@ name: todo-list
 type: project-constitution
 project: todo-list
 plugin: ai-driven-sdlc
-plugin_version: 0.2.0-wave2
 language: ru
 created: 2026-04-19
 updated: 2026-04-19

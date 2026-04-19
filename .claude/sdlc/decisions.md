@@ -345,6 +345,69 @@ updated: 2026-04-19
 - rationale: фиксы локальные, метаданные, повышают согласованность каркаса.
 - traces_to: [все `phases/*/*.md`, `system-context.md`, `roles.md`, `audit.md`]
 
+## 2026-04-19 14:30 — Актуализация под плагин 0.2.1
+
+- context: апгрейд `ai-driven-sdlc` 0.2.0 → 0.2.1; механизма миграций нет.
+- autonomy_mode: hitl
+- phase: cross-cutting
+- role: developer
+- changes_in_plugin:
+  - `.mcp.json`: убран `context7` (конфликт с dedicated плагином).
+  - `.github/ISSUE_TEMPLATE/work-unit.yml`: новый шаблон для Work-альфы.
+  - README, CHANGELOG: документационные обновления.
+  - skills/catalogs/agents/hooks/scripts: без изменений.
+- alternatives:
+  1. Скопировать `work-unit.yml` в проект; зафиксировать апгрейд.
+  2. Только зафиксировать апгрейд; шаблон не копировать.
+  3. Игнорировать апгрейд до накопления значимых изменений.
+- choice: 1
+- rationale: шаблон согласован с operations.md (GitHub Issues как канал feedback).
+- traces_to: [`.github/ISSUE_TEMPLATE/work-unit.yml`, `.claude/sdlc/tasks.md`]
+
+## 2026-04-19 14:31 — Не вендорить плагинный .mcp.json
+
+- context: 0.2.1 убрал `context7` из `.mcp.json` плагина; конфликт с dedicated.
+- autonomy_mode: hitl
+- phase: cross-cutting
+- role: developer
+- alternatives:
+  1. Не вендорить `.mcp.json` в проект; полагаться на user-scope плагины.
+  2. Скопировать обновлённый `.mcp.json` в корень проекта.
+  3. Создать собственный `.mcp.json` с подмножеством серверов.
+- choice: 1
+- rationale: `context7@claude-plugins-official` уже установлен user-scope; дублирование не нужно.
+- traces_to: []
+- evidence: отсутствие `.mcp.json` в корне проекта подтверждает решение.
+
+## 2026-04-19 14:50 — Источник истины для plugin_version
+
+- context: аудит I-05/I-06 — версия плагина рассинхронизирована между CLAUDE.md и журналами.
+- autonomy_mode: hitl
+- phase: cross-cutting
+- role: developer
+- alternatives:
+  1. `plugin-config.md` — отделить версию плагина от схемы конфига; единый источник.
+  2. `CLAUDE.md` — конституция как декларативный носитель версии.
+  3. Не фиксировать; принять статус warn.
+- choice: 1
+- rationale: `plugin-config.md` уже точка интеграции с hooks; ниже риск дрейфа.
+- traces_to: [`.claude/sdlc/plugin-config.md`, `.claude/CLAUDE.md`, `.claude/sdlc/audit.md`]
+- evidence: убрано поле `plugin_version` из CLAUDE.md, decisions.md, tasks.md.
+
+## 2026-04-19 14:51 — Связность задачи актуализации
+
+- context: аудит I-07 — циркулярная ссылка в 14:31 + отсутствие `traces_from` в задаче.
+- autonomy_mode: hitl
+- phase: cross-cutting
+- role: developer
+- alternatives:
+  1. Добавить `traces_from` в задачу; убрать циркулярную ссылку (заменить на `[]`).
+  2. Только текстовая пометка без поля.
+  3. Не трогать; формат `tasks.md` исторически без обратных следов.
+- choice: 1
+- rationale: формализация связки ускоряет impact-анализ; затраты минимальны.
+- traces_to: [`.claude/sdlc/tasks.md`, `.claude/sdlc/decisions.md`]
+
 ## Правила
 
 - Минимум 2 альтернативы; оптимально 3.

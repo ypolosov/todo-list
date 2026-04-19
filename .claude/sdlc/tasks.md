@@ -80,6 +80,15 @@ _пока нет_
 - Обратная связь: GitHub Issues.
 - Инцидент-плейбук: revert + 1-строчный postmortem в decisions.md.
 
+### 2026-04-19 — Актуализация под плагин 0.2.1
+- Артефакт: `.github/ISSUE_TEMPLATE/work-unit.yml`.
+- traces_from: `decisions.md` 2026-04-19 14:30 — Актуализация под плагин 0.2.1.
+- Источник: апгрейд `ai-driven-sdlc` 0.2.0 → 0.2.1 (CHANGELOG плагина).
+- Изменения в плагине: `.mcp.json` без context7, новый work-unit template.
+- Применено: скопирован шаблон Work-unit, адаптирован DoD под React-стек.
+- Не применено: вендорить `.mcp.json` (есть dedicated context7 user-scope).
+- Альфы не двигаются; Way of Working укрепляется.
+
 ## Правила
 
 - Новая задача — запись со ссылкой на продвигаемую альфу.

@@ -2,131 +2,84 @@
 name: audit
 type: audit-report
 project: todo-list
-run_at: 2026-04-19 13:15
+run_at: 2026-04-19 23:50
 auditor: sdlc-consistency-auditor
-status: warn
-issues_count: 4
-applied_at: 2026-04-19 13:45
-applied_count: 4
-applied_status: fixed
+status: pass
+issues_count: 0
+plugin_version_source: .claude/sdlc/plugin-config.md
+previous_run_at: 2026-04-19 23:40
+previous_status: warn
+previous_applied_at: 2026-04-19 23:44
 ---
 
-# Сквозной аудит консистентности todo-list
+# Сквозной аудит консистентности todo-list (run 3)
 
 ## 1. Резюме
 
-Итог: **warn** — найдены 4 расхождения, ни одно не блокирует merge.
+Итог: **pass** — все три расхождения предыдущего прогона (I-05, I-06, I-07) закрыты примененными фиксами; новых расхождений не обнаружено.
 
-Все 7 фаз SDLC (vision → requirements → architecture → testing → development → deployment → operations) пройдены. Трассируемость `traces_from` согласована по всей цепочке фаз. Все 5 фич (F-01…F-05) имеют acceptance-контракты в testing.md и реализацию в `src/` с парными тестами (62 теста зелёные, coverage domain/application = 100%). Все продвижения альф имеют артефакты-свидетельства. Все 23 записи в `decisions.md` содержат по 3 альтернативы (требование принципа 1 выполнено с запасом). SME-уровень `pet` согласован между `profile.md` и frontmatter всех фаз.
+Сфокусированный аудит изменений после применения фиксов: добавлено `plugin_version: 0.2.1` во frontmatter `plugin-config.md` и зафиксировано правило «единственный источник истины»; удалено поле `plugin_version` из frontmatter `decisions.md`, `tasks.md`, `.claude/CLAUDE.md`; запись `tasks.md` «Актуализация под плагин 0.2.1» получила `traces_from`; запись `decisions.md` 14:31 заменила циркулярную ссылку на `traces_to: []` + поле `evidence`; добавлены 2 новые decision-записи (14:50 и 14:51), документирующие выбор источника истины и связность задачи.
 
-Найденные расхождения носят характер незавершённой обратной связи: `traces_to` везде пустые, `roles.md` не зеркалит все фазы, `system-context.md` не дозаписал подсистемы после фазы architecture. Ни одно не нарушает принципов и не требует отката альф.
+Подтверждено: единый источник истины по версии плагина — `plugin-config.md` (`plugin_version: 0.2.1`); правило явно зафиксировано в секции «Правила»; обе новые decision-записи содержат по 3 альтернативы, choice и rationale; обратная ссылка `traces_from` в `tasks.md` указывает на корректную запись в `decisions.md`; циркулярная ссылка в записи 14:31 устранена; альфы стабильны (`alphas.md` mtime 14:12, до изменений 23:36; журнал переходов не модифицировался).
 
 ## 2. Проверки
 
 | Проверка | Статус | Детали |
 |---|---|---|
-| Трассируемость фаз | warn | Все `traces_from` корректны; но `traces_to` пустые во всех 7 фазах, хотя последующие фазы существуют. |
-| Соответствие уровню SME | pass | Все 7 фаз — `sme_level: pet`, согласован с `profile.md`. |
-| Альфы ↔ артефакты | pass | Каждое продвижение имеет артефакт; Production-прогон подкреплён GitHub Actions run 24626510735. |
-| System-context ↔ архитектура | warn | `system-context.md` ещё пишет «Подсистемы: не определены», а `architecture.md` их определил (domain, application, inbound/outbound adapters). |
-| Осиротевшие ссылки | pass | Все ссылки на `.claude/sdlc/**/*.md` разрешаются в существующие файлы. |
-| TDD-семантика | pass | F-01…F-05 покрыты unit+component+E2E; пары source↔test существуют; код реализует acceptance-контракты из `testing.md`. |
-| Memom-консистентность (Волна 2) | n/a | Волна 2 не активирована в проекте; `memom.md` плагина не отслеживается на pet-масштабе. |
-
-Дополнительно (не входит в обязательный набор):
-
-| Проверка | Статус | Детали |
-|---|---|---|
-| Roles ↔ phase assignments | warn | `roles.md` для `product-owner` перечисляет `[vision, requirements, operations]`, но фаза `architecture` также назначает `role: product-owner`. |
-| Decisions — покрытие значимых выборов | pass | 23 записи охватывают все значимые выборы фаз; минимум 2 альтернативы выдержан во всех. |
+| Закрытие I-05 (рассинхрон версии плагина) | pass | `plugin_version` теперь только в `plugin-config.md`; в `decisions.md`, `tasks.md`, `CLAUDE.md` поле отсутствует во frontmatter. |
+| Закрытие I-06 (политика поля `plugin_version`) | pass | Правило «единственный источник истины» добавлено в `plugin-config.md:111`; декларация в шапке (`plugin-config.md:13`); политика выполнена. |
+| Закрытие I-07 (связность задачи 14:30) | pass | `tasks.md:85` содержит `traces_from: decisions.md 2026-04-19 14:30`; `decisions.md:379` имеет `traces_to: []` + `evidence` (вместо циркулярной ссылки). |
+| Принцип 1 для записи 14:50 | pass | 3 альтернативы (`plugin-config.md` / `CLAUDE.md` / не фиксировать), `choice: 1`, rationale зафиксирован. |
+| Принцип 1 для записи 14:51 | pass | 3 альтернативы (`traces_from` / текстовая пометка / не трогать), `choice: 1`, rationale зафиксирован. |
+| Traceability decisions ↔ tasks ↔ артефакты | pass | 14:30 → `tasks.md` (через `traces_from`) → `work-unit.yml`; 14:50 → `plugin-config.md`+`CLAUDE.md`+`audit.md`; 14:51 → `tasks.md`+`decisions.md`. Все цели существуют. |
+| Согласованность frontmatter | pass | Поле `plugin_version` отсутствует в 7 SDLC-артефактах и в `CLAUDE.md`; присутствует только в `plugin-config.md` и в журнальном `audit.md` (как метаданное прогона). |
+| Альфы стабильны | pass | `alphas.md` mtime 1776597160 (14:12); запись `tasks.md` 14:30 явно фиксирует «Альфы не двигаются; Way of Working укрепляется». Журнал переходов не модифицирован. |
+| Правило 15 слов / русский язык | pass | Все 14 новых утверждений в `decisions.md` и `plugin-config.md` ≤14 слов; русский без латиницы вне идентификаторов. |
+| Решение «не вендорить .mcp.json» (повторная проверка) | pass | Файл `.mcp.json` отсутствует в корне; запись 14:31 валидна с `evidence`. |
+| Осиротевшие ссылки | pass | Все ссылки в новых и обновлённых записях разрешаются: `plugin-config.md`, `CLAUDE.md`, `audit.md`, `tasks.md`, `decisions.md`. |
+| Согласованность `system-context.md` ↔ архитектура | pass | Подсистемы `domain/application/inbound-adapters/outbound-adapters` совпадают с `architecture.md` (без изменений с прошлого прогона). |
+| Соответствие SME pet | pass | Структура артефактов укладывается в pet-уровень `profile.md`; история SME не трогалась. |
 
 ## 3. Найденные расхождения
 
-### I-01 — Пустые `traces_to` во всех фазах (important)
+Расхождений нет. Все три открытых issue предыдущего прогона закрыты:
 
-- Локация: `phases/vision/vision.md:12`, `phases/requirements/requirements.md:12`, `phases/architecture/architecture.md:12`, `phases/testing/testing.md:12`, `phases/development/development.md:12`, `phases/deployment/deployment.md:12`, `phases/operations/operations.md:12`.
-- Описание: во frontmatter каждой фазы `traces_to: []` с комментарием «будут добавлены после фазы X». Поскольку все последующие фазы существуют, обратная трассировка должна быть заполнена. Это снижает навигацию и затрудняет impact-анализ при изменениях ранних фаз.
-- Критичность: important — не блокирует, но ухудшает сопровождаемость.
+| ID | Статус |
+|---|---|
+| I-05 — Рассинхрон `plugin_version` между конституцией и журналами | закрыт |
+| I-06 — Нет политики поля `plugin_version` во frontmatter | закрыт |
+| I-07 — Запись в `tasks.md` без `traces_from`; запись 14:31 циркулярна | закрыт |
 
-### I-02 — system-context.md не дозаписал подсистемы (important)
+## 4. Привязка к альфам
 
-- Локация: `.claude/sdlc/system-context.md:26`.
-- Описание: строка «Подсистемы: не определены; уточняются в фазе architecture» устарела. В `architecture.md:89` подсистемы определены явно: `domain, application, inbound-adapters, outbound-adapters`. Фокус внимания должен быть актуален относительно уже пройденной фазы.
-- Критичность: important.
+| Альфа | Состояние | Изменилось ли | Свидетельство |
+|---|---|---|---|
+| Opportunity | Addressed | нет | `phases/operations/operations.md` |
+| Stakeholders | Involved | нет | `phases/requirements/requirements.md` |
+| Requirements | Acceptable | нет | `phases/testing/testing.md` |
+| Software System | Operational | нет | GitHub Actions run 24626510735 |
+| Work | Under Control | нет | `phases/development/development.md` |
+| Team | Formed | нет | `roles.md` |
+| Way of Working | Foundation Established | укреплена | `plugin-config.md` (правило источника истины), `decisions.md` (записи 14:50, 14:51) |
 
-### I-03 — roles.md не отражает фазу architecture для product-owner (note)
+`alphas.md` mtime 14:12 — журнал состояний альф не модифицирован между прогонами; единственный источник правды (агент `sdlc-alpha-tracker`) даёт стабильное состояние.
 
-- Локация: `.claude/sdlc/roles.md:17`.
-- Описание: колонка `phases` для `product-owner` = `[vision, requirements, operations]`. Однако `architecture.md:10` указывает `role: product-owner` (с пометкой «на pet-масштабе совмещает architect»). Согласование таблицы ролей с фактическими назначениями фаз нарушено.
-- Критичность: note — историческая неточность, не влияет на альфы.
+## 5. Сравнение с предыдущим прогоном (2026-04-19 23:40)
 
-### I-04 — operations.traces_from пропускает непрерывную цепочку (note)
+| Артефакт прошлого прогона | Статус сейчас |
+|---|---|
+| I-01 (пустые `traces_to`) | закрыт фиксом 13:45 |
+| I-02 (`system-context.md` без подсистем) | закрыт фиксом 13:45 |
+| I-03 (`roles.md` без architecture у product-owner) | закрыт фиксом 13:45 |
+| I-04 (`operations.traces_from` нелинейная) | закрыт фиксом 13:45 |
+| I-05 (рассинхрон версии плагина) | закрыт фиксом 23:44 |
+| I-06 (нет политики поля `plugin_version`) | закрыт фиксом 23:44 |
+| I-07 (циркулярная/отсутствующая трассировка задачи 14:30) | закрыт фиксом 23:44 |
 
-- Локация: `.claude/sdlc/phases/operations/operations.md:11`.
-- Описание: `traces_from: [deployment.md, vision.md]`. Прямой предыдущей фазой является deployment; vision включён как источник цикла обратной связи Operations → Vision. Технически корректно, но отличается от линейной схемы трассировки других фаз. Стоит либо задокументировать это отклонение явно, либо ограничить `traces_from` линейной предыдущей фазой и выразить обратный цикл через `traces_to` в vision.
-- Критичность: note.
+Все семь исторических расхождений подтверждённо исправлены и не воспроизводятся. Каркас SDLC консистентен на текущей итерации.
 
-## 4. Предложенные фиксы
+## 6. Рекомендации (без применения)
 
-Применяются только в режиме `--apply` (принцип 1: альтернативы фиксируются, выбор подтверждается пользователем).
-
-### Фикс I-01 — заполнение `traces_to`
-
-1. **Полная обратная трассировка.** Заполнить `traces_to` во всех 7 фазах всеми прямыми наследниками (vision → [requirements, operations]; requirements → [architecture, testing]; architecture → [testing, development]; testing → [development, deployment]; development → [deployment]; deployment → [operations]; operations → []).
-2. **Минимальная обратная трассировка.** Заполнить только прямого линейного наследника (vision → [requirements], requirements → [architecture], …), не учитывая косвенные связи.
-3. **Только комментарий.** Обновить текстовый комментарий «будут добавлены после…» → «итерация закрыта, наследники перечислены в секции 4». Оставить массив пустым, но честно отразить статус.
-
-Рекомендация: **альтернатива 1** — даёт полноценный impact-анализ, незначительная стоимость на pet-масштабе.
-
-### Фикс I-02 — актуализация system-context.md
-
-1. **Обновить блок «Границы целевой системы».** Переписать «Подсистемы: не определены» → фактический список: `domain, application, inbound-adapters, outbound-adapters`. Добавить пометку «источник: фаза architecture».
-2. **Добавить журнальную запись.** Оставить текущий блок как исторический, добавить новую запись в «Журнал фокусировок» с обновлением подсистем от 2026-04-19 (фаза architecture).
-3. **Оставить как есть.** Зафиксировать, что `system-context.md` — привязка внимания на старте, а `architecture.md` — источник истины для подсистем. Принять расхождение сознательно.
-
-Рекомендация: **альтернатива 1** — соответствует принципу «единственный источник истины» и делает system-context.md актуальным для Волны 2 (где из него будут генерироваться `README.sdlc.md`).
-
-### Фикс I-03 — синхронизация roles.md
-
-1. **Добавить architecture в список фаз product-owner.** В ячейке `phases` заменить `[vision, requirements, operations]` на `[vision, requirements, architecture, operations]` с пометкой «совмещает architect на pet-масштабе».
-2. **Явно добавить роль architect.** В таблицу ролей добавить `architect` как активную роль, сослаться на обоснование в `decisions.md` (pet-совмещение).
-3. **Не трогать.** Признать, что совмещение ролей на pet-масштабе не требует зеркального отражения; полагаться на frontmatter фаз как источник истины.
-
-Рекомендация: **альтернатива 1** — минимальное изменение, сохраняет архитектуру «один product-owner с ремарками о совмещении».
-
-### Фикс I-04 — трассировка operations
-
-1. **Оставить как есть + документация.** Добавить в секцию 4 operations.md явное объяснение: «vision включён в traces_from как источник цикла обратной связи». Пояснение закрывает расхождение без изменения frontmatter.
-2. **Привести к линейной схеме.** Убрать `vision.md` из `traces_from` operations, добавить `operations.md` в `traces_to` vision. Выразить цикл через обратную трассировку.
-3. **Ввести отдельное поле.** Добавить в мета-шаблон `phase-artifact.meta.md` поле `feedback_loops_to: [...]` (Волна 2) для цикловых связей. На pet — записать неформально в тексте.
-
-Рекомендация: **альтернатива 1** — минимальная стоимость, сохраняет существующий факт цикла, закрывает недопонимание.
-
-## 5. Привязка к альфам
-
-Состояние ключевых альф на момент аудита (через `sdlc-alpha-tracker`):
-
-| Альфа | Состояние | Свидетельство |
-|---|---|---|
-| Opportunity | Addressed | `phases/operations/operations.md` + использование автором |
-| Stakeholders | Involved | `phases/requirements/requirements.md` |
-| Requirements | Acceptable | `phases/testing/testing.md` (acceptance для F-01…F-05) |
-| Software System | Operational | GitHub Actions run 24626510735 + работающий URL |
-| Work | Under Control | `phases/development/development.md` (62/62 тестов, метрики пробега) |
-| Team | Formed | `roles.md` (product-owner, developer, tester активны) |
-| Way of Working | Foundation Established | `profile.md` + `plugin-config.md` |
-
-Ни одна альфа не требует отката по итогам аудита. Все расхождения относятся к навигации и зеркалированию уже принятых решений.
-
-## 6. Применённые фиксы (2026-04-19 13:45)
-
-Все 4 расхождения закрыты по рекомендованной альтернативе 1.
-
-| ID | Альтернатива | Артефакты |
-|---|---|---|
-| I-01 | Полная обратная трассировка | frontmatter всех 7 `phases/*/*.md` |
-| I-02 | Обновление блока «Границы целевой системы» + запись в журнал | `system-context.md` |
-| I-03 | Добавить `architecture` в `phases` у `product-owner` | `roles.md` |
-| I-04 | Пояснение в секции 4 operations | `phases/operations/operations.md` |
-
-Журнал решения о применении: `decisions.md` записи уже содержат выбор альтернатив фиксов.
+- При следующем апгрейде плагина обновлять `plugin_version` только в `plugin-config.md` и фиксировать запись в `decisions.md` (правило закреплено `plugin-config.md:112`).
+- При появлении новых журнальных артефактов (`audit.md`, новые `decisions`-записи) применять то же правило: версия плагина не дублируется во frontmatter.
+- Поле `plugin_version_source` в шапке `audit.md` указывает читателю единственный авторитетный источник; использовать в будущих прогонах.

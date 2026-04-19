@@ -2,6 +2,7 @@
 name: plugin-config
 type: hooks-config
 version: 1
+plugin_version: 0.2.1
 updated: 2026-04-19
 ---
 
@@ -9,6 +10,7 @@ updated: 2026-04-19
 
 Читается скриптами плагина.
 SME-решения вынесены в `profile.md`.
+Версия плагина (`plugin_version`) фиксируется только здесь.
 
 ## state_artifact
 
@@ -106,3 +108,5 @@ system_readme_ttl_days: 30
 - Без formatter/linter после development — запись кода блокируется.
 - Без tdd_pairs — TDD hook пропускает правки с предупреждением.
 - Путь state-артефакта фиксируется здесь и агентом `sdlc-state-reader`.
+- `plugin_version` — единственный источник истины; другие артефакты не дублируют.
+- При апгрейде плагина обновить `plugin_version` и зафиксировать запись в `decisions.md`.
