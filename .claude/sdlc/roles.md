@@ -14,7 +14,7 @@ updated: 2026-04-19
 
 | slug | title | активна | last_played_at | phases | interests | alphas |
 |---|---|---|---|---|---|---|
-| product-owner | Владелец продукта | да | 2026-04-19 | [vision, requirements, operations] | [ценность, приоритеты, метрики] | [Opportunity, Stakeholders, Requirements] |
+| product-owner | Владелец продукта | да | 2026-04-19 | [vision, requirements, architecture, operations] | [ценность, приоритеты, метрики; на pet совмещает architect] | [Opportunity, Stakeholders, Requirements, Software System] |
 | developer | Разработчик | да | 2026-04-19 | [development, testing] | [сопровождаемость, скорость фидбэка, автоматизация] | [Software System, Work] |
 | tester | Тестировщик | да | 2026-04-19 | [testing, development] | [покрытие поведения, устойчивость, регрессии] | [Software System, Requirements] |
 

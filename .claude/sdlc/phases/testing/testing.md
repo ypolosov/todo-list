@@ -9,7 +9,7 @@ alphas: [Software System, Requirements]
 disciplines: [software-testing, test-driven-development]
 role: developer
 traces_from: [.claude/sdlc/phases/requirements/requirements.md, .claude/sdlc/phases/architecture/architecture.md]
-traces_to: []
+traces_to: [.claude/sdlc/phases/development/development.md]
 system_of_attention: todo-list
 created: 2026-04-19
 updated: 2026-04-19

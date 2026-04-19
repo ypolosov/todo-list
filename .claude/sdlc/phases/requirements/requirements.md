@@ -9,7 +9,7 @@ alphas: [Requirements, Stakeholders]
 disciplines: [requirements-engineering, stakeholder-analysis]
 role: product-owner
 traces_from: [.claude/sdlc/phases/vision/vision.md]
-traces_to: []
+traces_to: [.claude/sdlc/phases/architecture/architecture.md, .claude/sdlc/phases/testing/testing.md]
 system_of_attention: todo-list
 created: 2026-04-19
 updated: 2026-04-19

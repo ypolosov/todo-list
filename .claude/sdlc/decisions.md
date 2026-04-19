@@ -331,6 +331,20 @@ updated: 2026-04-19
 - rationale: явный выбор пользователя; лёгкая трассируемость без формализма.
 - traces_to: [`.claude/sdlc/phases/operations/operations.md`]
 
+## 2026-04-19 13:45 — Применение фиксов аудита
+
+- context: `/sdlc-audit` обнаружил 4 расхождения (2 important, 2 note).
+- autonomy_mode: hitl
+- phase: cross-cutting
+- role: developer
+- alternatives:
+  1. Применить все 4 фикса по рекомендации аудитора (альтернатива 1 каждый).
+  2. Применить только important (I-01, I-02); два note отложить.
+  3. Оставить отчёт без изменений.
+- choice: 1
+- rationale: фиксы локальные, метаданные, повышают согласованность каркаса.
+- traces_to: [все `phases/*/*.md`, `system-context.md`, `roles.md`, `audit.md`]
+
 ## Правила
 
 - Минимум 2 альтернативы; оптимально 3.

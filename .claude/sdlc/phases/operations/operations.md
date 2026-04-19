@@ -77,6 +77,7 @@ updated: 2026-04-19
 ## 4. Трассируемость
 
 - traces_from: [`.claude/sdlc/phases/deployment/deployment.md`, `.claude/sdlc/phases/vision/vision.md`].
+- Примечание: `vision.md` включён в `traces_from` не как линейный предшественник, а как источник цикла обратной связи Operations → Vision. Линейный предшественник — `deployment.md`.
 - traces_to: новые итерации Vision/Requirements по мере поступления идей.
 - Продвижение альф: `.claude/sdlc/alphas.md`.
 

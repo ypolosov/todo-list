@@ -9,7 +9,7 @@ alphas: [Software System]
 disciplines: [continuous-delivery]
 role: developer
 traces_from: [.claude/sdlc/phases/testing/testing.md, .claude/sdlc/phases/development/development.md]
-traces_to: []
+traces_to: [.claude/sdlc/phases/operations/operations.md]
 system_of_attention: todo-list
 created: 2026-04-19
 updated: 2026-04-19

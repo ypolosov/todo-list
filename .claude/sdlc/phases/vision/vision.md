@@ -9,7 +9,7 @@ alphas: [Opportunity, Stakeholders]
 disciplines: [product-discovery, stakeholder-analysis]
 role: product-owner
 traces_from: []
-traces_to: []
+traces_to: [.claude/sdlc/phases/requirements/requirements.md, .claude/sdlc/phases/operations/operations.md]
 system_of_attention: todo-list
 created: 2026-04-19
 updated: 2026-04-19

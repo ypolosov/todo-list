@@ -9,7 +9,7 @@ alphas: [Software System, Requirements]
 disciplines: [software-architecture, functional-decomposition]
 role: product-owner
 traces_from: [.claude/sdlc/phases/vision/vision.md, .claude/sdlc/phases/requirements/requirements.md]
-traces_to: []
+traces_to: [.claude/sdlc/phases/testing/testing.md, .claude/sdlc/phases/development/development.md]
 system_of_attention: todo-list
 created: 2026-04-19
 updated: 2026-04-19

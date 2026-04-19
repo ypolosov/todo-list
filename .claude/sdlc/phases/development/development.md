@@ -9,7 +9,7 @@ alphas: [Software System, Work]
 disciplines: [software-construction, test-driven-development]
 role: developer
 traces_from: [.claude/sdlc/phases/architecture/architecture.md, .claude/sdlc/phases/testing/testing.md]
-traces_to: []
+traces_to: [.claude/sdlc/phases/deployment/deployment.md]
 system_of_attention: todo-list
 created: 2026-04-19
 updated: 2026-04-19
