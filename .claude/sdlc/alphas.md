@@ -7,7 +7,6 @@ updated: 2026-04-19
 
 # Журнал состояний альф todo-list
 
-
 Единственный источник истины — агент `sdlc-alpha-tracker`.
 Другие агенты читают состояния только через трекер.
 
@@ -18,7 +17,7 @@ updated: 2026-04-19
 | Opportunity | Value Established | `.claude/sdlc/phases/vision/vision.md` | 2026-04-19 |
 | Stakeholders | Involved | `.claude/sdlc/phases/requirements/requirements.md` | 2026-04-19 |
 | Requirements | Acceptable | `.claude/sdlc/phases/testing/testing.md` | 2026-04-19 |
-| Software System | Demonstrable | `.claude/sdlc/phases/development/development.md` | 2026-04-19 |
+| Software System | Ready | `.claude/sdlc/phases/deployment/deployment.md` | 2026-04-19 |
 | Work | Under Control | `.claude/sdlc/phases/development/development.md` | 2026-04-19 |
 | Team | Formed | `.claude/sdlc/roles.md` | 2026-04-19 |
 | Way of Working | Foundation Established | `.claude/sdlc/profile.md` | 2026-04-19 |
@@ -93,6 +92,14 @@ updated: 2026-04-19
   - Артефакт: `.claude/sdlc/phases/development/development.md`.
   - Роль: developer. Метод: software-construction + tdd-first-react-spa.
   - Причина: фазы пройдены последовательно; TDD-протокол соблюдён; метрики пробега зафиксированы.
+
+### 2026-04-19 — Фаза Deployment
+
+- **Software System**: Demonstrable → Ready.
+  - Артефакт: `.claude/sdlc/phases/deployment/deployment.md`.
+  - Роль: developer (совмещает devops). Метод: continuous-delivery + github-pages-via-actions.
+  - Причина: workflows `ci.yml` и `deploy.yml` написаны; build с `VITE_BASE=/todo-list/` успешен; стратегия отката описана.
+  - Примечание: продвижение до Operational отложено до первого успешного прогона GitHub Actions в реальной среде (push выполняет пользователь).
 
 ## Правила
 

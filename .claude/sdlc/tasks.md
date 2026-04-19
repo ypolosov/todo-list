@@ -16,11 +16,10 @@ _пока нет_
 
 ## Ожидающие задачи
 
-- Запустить фазу `deployment` через `/sdlc-phase deployment`.
-  - Альфы: Software System (к Ready/Operational).
-  - Роль: devops / developer.
-- E2E прогон Playwright в локальной среде.
-- Проверка сборки `npm run build`.
+- Push в `main` для первого прогона `deploy.yml` (Software System → Operational).
+- Включить GitHub Pages в настройках репозитория (Source: GitHub Actions).
+- Запустить `/sdlc-phase operations` после успешного деплоя.
+- Опционально: `npx playwright install chromium` + локальный прогон E2E.
 
 ## Завершённые задачи
 
@@ -64,6 +63,14 @@ _пока нет_
 - Стек: Vite + React 18 + TS + Vitest + RTL + Playwright.
 - Реализованы слои: domain, application, adapters (storage, ui).
 - Результаты: 62 теста зелёные, coverage domain/application 100%, lint/format/tsc чистые.
+
+### 2026-04-19 — Фаза Deployment
+- Артефакт: `.claude/sdlc/phases/deployment/deployment.md`.
+- Software System: Demonstrable → Ready.
+- Workflows: `.github/workflows/ci.yml`, `.github/workflows/deploy.yml`.
+- Среда: GitHub Pages (`https://ypolosov.github.io/todo-list/`).
+- Сборка `VITE_BASE=/todo-list/ npm run build` успешна.
+- Rollback: `git revert` + авто-передеплой.
 
 ## Правила
 

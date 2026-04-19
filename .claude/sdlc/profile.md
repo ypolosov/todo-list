@@ -4,7 +4,7 @@ type: sdlc-profile
 project: todo-list
 created: 2026-04-19
 updated: 2026-04-19
-active_phase: development
+active_phase: deployment
 ---
 
 # SME-профиль проекта todo-list
@@ -21,7 +21,7 @@ active_phase: development
 | architecture | pet | software-architecture | structure-sketch | hitl |
 | development | pet | software-construction | tdd-first-react-spa | hitl |
 | testing | pet | software-testing | test-strategy-pet | hitl |
-| deployment | pet | не выбрано | не выбрано | hitl |
+| deployment | pet | continuous-delivery | github-pages-via-actions | hitl |
 | operations | pet | не выбрано | не выбрано | hitl |
 
 Уровни ставятся на старте как ориентир; уточняются на фазах через `sdlc-method-engineering`.
@@ -42,6 +42,7 @@ active_phase: development
 | 2026-04-19 | architecture | не выбрано | software-architecture + structure-sketch | pet-эскиз; стек React+localStorage; hexagonal + DDD-lite |
 | 2026-04-19 | testing | не выбрано | software-testing + test-strategy-pet | Vitest + RTL + Playwright; coverage 100% на domain/application |
 | 2026-04-19 | development | не выбрано | software-construction + tdd-first-react-spa | Vite + React + TS + npm; Red-Green-Refactor |
+| 2026-04-19 | deployment | не выбрано | continuous-delivery + github-pages-via-actions | GitHub Pages + Actions; revert как rollback |
 
 ## Правила
 

@@ -261,6 +261,48 @@ updated: 2026-04-19
 - rationale: явный выбор пользователя; короткие циклы дают быструю обратную связь.
 - traces_to: [`.claude/sdlc/phases/development/development.md`]
 
+## 2026-04-19 11:45 — Следующий шаг после development
+
+- context: код написан, тесты зелёные; нужен путь до Usable.
+- autonomy_mode: hitl
+- phase: cross-cutting
+- role: developer
+- alternatives:
+  1. `/sdlc-phase deployment` — сборка, запуск, публикация.
+  2. `/sdlc-audit` — проверить консистентность до развёртывания.
+  3. `/sdlc-phase operations` — сразу к эксплуатации (пропуск deployment).
+- choice: 1
+- rationale: естественный порядок; Software System требует среды для запуска.
+- traces_to: [`.claude/sdlc/tasks.md`]
+
+## 2026-04-19 12:00 — Хостинг и CI/CD
+
+- context: статичная SPA; нужна бесплатная среда и автоматизация.
+- autonomy_mode: hitl
+- phase: deployment
+- role: developer
+- alternatives:
+  1. GitHub Pages + GitHub Actions — бесплатно, уже в экосистеме GitHub Flow.
+  2. Netlify / Vercel / Cloudflare Pages — PaaS с preview-URL, требует учётки.
+  3. Только локальный запуск — без хостинга.
+- choice: 1
+- rationale: явный выбор пользователя; минимум внешних зависимостей.
+- traces_to: [`.github/workflows/ci.yml`, `.github/workflows/deploy.yml`]
+
+## 2026-04-19 12:01 — Стратегия отката
+
+- context: как возвращать предыдущую версию при инциденте.
+- autonomy_mode: hitl
+- phase: deployment
+- role: developer
+- alternatives:
+  1. `git revert` + автодеплой — идёт через обычный pipeline.
+  2. Ручной redeploy старого sha через workflow_dispatch.
+  3. Без rollback — fix forward.
+- choice: 1
+- rationale: явный выбор пользователя; обратимо, ~2 минуты до выката.
+- traces_to: [`.claude/sdlc/phases/deployment/deployment.md`]
+
 ## Правила
 
 - Минимум 2 альтернативы; оптимально 3.
