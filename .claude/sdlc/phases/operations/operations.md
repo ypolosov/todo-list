@@ -9,10 +9,10 @@ alphas: [Software System, Opportunity]
 disciplines: [site-reliability-engineering]
 role: developer
 traces_from: [.claude/sdlc/phases/deployment/deployment.md, .claude/sdlc/phases/vision/vision.md]
-traces_to: []
+traces_to: [.claude/sdlc/phases/vision/vision.md]
 system_of_attention: todo-list
 created: 2026-04-19
-updated: 2026-04-19
+updated: 2026-04-22
 ---
 
 # Operations проекта todo-list
@@ -78,7 +78,8 @@ updated: 2026-04-19
 
 - traces_from: [`.claude/sdlc/phases/deployment/deployment.md`, `.claude/sdlc/phases/vision/vision.md`].
 - Примечание: `vision.md` включён в `traces_from` не как линейный предшественник, а как источник цикла обратной связи Operations → Vision. Линейный предшественник — `deployment.md`.
-- traces_to: новые итерации Vision/Requirements по мере поступления идей.
+- traces_to: [`.claude/sdlc/phases/vision/vision.md`] — feedback cycle.
+- Новые итерации Vision/Requirements по мере поступления идей.
 - Продвижение альф: `.claude/sdlc/alphas.md`.
 
 ## 5. Критерии готовности

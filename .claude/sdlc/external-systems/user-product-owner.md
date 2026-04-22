@@ -6,7 +6,7 @@ role_vs_target: creation_system
 project: todo-list
 last_focused_at: 2026-04-19
 focus_count: 1
-updated: 2026-04-19
+updated: 2026-04-22
 ---
 
 # Система создания: пользователь в роли product-owner
@@ -27,7 +27,7 @@ updated: 2026-04-19
 | Альфа | Состояние | Артефакт-свидетельство |
 |---|---|---|
 | Team | Formed | `.claude/sdlc/roles.md` |
-| Stakeholders | Recognized | `.claude/sdlc/roles.md` |
+| Stakeholders | Involved | `.claude/sdlc/phases/requirements/requirements.md` |
 
 ## 4. Связанные артефакты SDLC
 

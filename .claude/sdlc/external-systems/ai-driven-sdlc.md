@@ -6,7 +6,8 @@ role_vs_target: creation_system
 project: todo-list
 last_focused_at: 2026-04-19
 focus_count: 1
-updated: 2026-04-19
+updated: 2026-04-22
+version_source: .claude/sdlc/plugin-config.md
 ---
 
 # Система создания: плагин ai-driven-sdlc
@@ -15,6 +16,7 @@ updated: 2026-04-19
 
 Методологический плагин Claude Code, несущий каркас SDLC.
 Запись: `.claude/sdlc/system-context.md`.
+Текущая версия плагина указана в `.claude/sdlc/plugin-config.md` (`plugin_version`).
 
 ## 2. Текущий фокус
 

@@ -2,7 +2,7 @@
 name: tasks
 type: work-state
 project: todo-list
-updated: 2026-04-19
+updated: 2026-04-22
 ---
 
 # Состояние задач Work-альфы todo-list

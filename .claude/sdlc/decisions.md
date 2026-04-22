@@ -2,7 +2,7 @@
 name: decisions
 type: decision-journal
 project: todo-list
-updated: 2026-04-19
+updated: 2026-04-22
 ---
 
 # Журнал альтернатив и решений todo-list
@@ -407,6 +407,81 @@ updated: 2026-04-19
 - choice: 1
 - rationale: формализация связки ускоряет impact-анализ; затраты минимальны.
 - traces_to: [`.claude/sdlc/tasks.md`, `.claude/sdlc/decisions.md`]
+
+## 2026-04-22 11:20 — Аудит I-01: рассинхронизация Stakeholders в external-system
+
+- context: `/sdlc-audit --apply` — I-01 important. Локальная таблица `external-systems/user-product-owner.md` рапортовала `Stakeholders = Recognized`, трекер — `Involved`.
+- autonomy_mode: hitl
+- phase: cross-cutting
+- role: product-owner
+- alternatives:
+  1. Обновить локальную таблицу: `Stakeholders = Involved`, свидетельство `requirements.md`.
+  2. Убрать состояния из external-system, оставить только ссылку на `alphas.md`.
+  3. Пометить как автогенерируемое и добавить задачу в backlog.
+- choice: 1
+- rationale: минимальная правка, синхронизирует с трекером, сохраняет локальный быстрый обзор.
+- traces_to: [`.claude/sdlc/external-systems/user-product-owner.md`, `.claude/sdlc/audit.md`]
+- evidence: `external-systems/user-product-owner.md` строка 30 — `Involved`; `updated: 2026-04-22`.
+
+## 2026-04-22 11:21 — Аудит I-02: устаревшее поле updated в tasks.md
+
+- context: `/sdlc-audit --apply` — I-02 important. `tasks.md.updated: 2026-04-19`, но записи 14:50/14:51 в `decisions.md` правили `tasks.md`.
+- autonomy_mode: hitl
+- phase: cross-cutting
+- role: product-owner
+- alternatives:
+  1. Обновить `updated: 2026-04-22` вручную; зафиксировать sync metadata после аудита.
+  2. Автоматизировать через hook, подбивающий `updated` по `git log -1 --format=%cs`.
+  3. Оставить как есть, полагаясь на git-историю.
+- choice: 1
+- rationale: минимальная правка сейчас; автоматизацию — в backlog.
+- traces_to: [`.claude/sdlc/tasks.md`, `.claude/sdlc/audit.md`]
+- evidence: `tasks.md` frontmatter `updated: 2026-04-22`.
+
+## 2026-04-22 11:22 — Аудит N-01: 15-word false positive на заголовках
+
+- context: `/sdlc-audit --apply` — N-01 note. `validate-artifact.sh` трактует длинные заголовки как утверждения.
+- autonomy_mode: hitl
+- phase: cross-cutting
+- role: product-owner
+- alternatives:
+  1. Оставить как есть; false positive задокументирован в `audit.md`.
+  2. Добавить `exempt_patterns` локально для трёх файлов.
+  3. Переформулировать заголовки короче.
+- choice: 1
+- rationale: исправление скрипта — задача плагина, не target-проекта. Локальные исключения добавят шум.
+- traces_to: [`.claude/sdlc/audit.md`]
+- evidence: статус `note`, нет изменений в артефактах.
+
+## 2026-04-22 11:23 — Аудит N-02: traces_to в operations.md
+
+- context: `/sdlc-audit --apply` — N-02 note. Пустой `traces_to` при описании feedback-цикла в тексте.
+- autonomy_mode: hitl
+- phase: cross-cutting
+- role: product-owner
+- alternatives:
+  1. Добавить в `traces_to` путь к `vision.md` с пометкой feedback cycle.
+  2. Ввести отдельное поле `traces_feedback`; требует правки мета-шаблона плагина.
+  3. Оставить как есть; считать комментарий в тексте достаточным.
+- choice: 1
+- rationale: формализует обратный поток без модификации мета-шаблона плагина.
+- traces_to: [`.claude/sdlc/phases/operations/operations.md`, `.claude/sdlc/audit.md`]
+- evidence: `operations.md` — `traces_to: [.claude/sdlc/phases/vision/vision.md]`.
+
+## 2026-04-22 11:24 — Аудит N-03: version_source в ai-driven-sdlc.md
+
+- context: `/sdlc-audit --apply` — N-03 note. External-system без привязки к версии плагина; при апгрейде не подсвечивается в impact-анализе.
+- autonomy_mode: hitl
+- phase: cross-cutting
+- role: product-owner
+- alternatives:
+  1. Добавить `version_source: .claude/sdlc/plugin-config.md` в frontmatter + упоминание в секции 1.
+  2. Жёстко прописать `plugin_version: 0.2.1` (противоречит 14:50 от 2026-04-19).
+  3. Оставить без изменений.
+- choice: 1
+- rationale: ссылка на источник без дублирования значения; соблюдает контракт 14:50.
+- traces_to: [`.claude/sdlc/external-systems/ai-driven-sdlc.md`, `.claude/sdlc/audit.md`]
+- evidence: `ai-driven-sdlc.md` frontmatter — `version_source: .claude/sdlc/plugin-config.md`.
 
 ## Правила
 
