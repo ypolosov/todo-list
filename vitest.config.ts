@@ -1,32 +1,15 @@
-import { defineConfig } from 'vitest/config';
-import react from '@vitejs/plugin-react';
+import { defineConfig } from "vitest/config";
 
 export default defineConfig({
-  plugins: [react()],
   test: {
+    environment: "happy-dom",
     globals: true,
-    environment: 'jsdom',
-    setupFiles: ['./src/test-setup.ts'],
-    include: ['src/**/*.test.{ts,tsx}'],
-    exclude: ['e2e/**', 'node_modules/**', 'dist/**'],
+    include: ["src/**/*.test.ts", "src/**/*.contract.test.ts", "src/**/*.smoke.test.ts"],
     coverage: {
-      provider: 'v8',
-      reporter: ['text', 'lcov'],
-      include: ['src/**/*.{ts,tsx}'],
-      exclude: [
-        'src/**/*.test.{ts,tsx}',
-        'src/**/*.d.ts',
-        'src/main.tsx',
-        'src/test-setup.ts',
-      ],
+      provider: "v8",
+      include: ["src/task-service.ts", "src/task-store.ts"],
       thresholds: {
-        'src/domain/**': {
-          statements: 100,
-          branches: 100,
-          functions: 100,
-          lines: 100,
-        },
-        'src/application/**': {
+        "src/task-service.ts": {
           statements: 100,
           branches: 100,
           functions: 100,

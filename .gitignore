@@ -1,13 +1,5 @@
-# ai-driven-sdlc: credentials (принцип 10) — не коммитить секреты
-.env
-.env.local
-.env.*.local
-
-# Node / Vite / Vitest / Playwright
 node_modules/
 dist/
 coverage/
-playwright-report/
-test-results/
-.vite/
-*.log
+.env
+.DS_Store

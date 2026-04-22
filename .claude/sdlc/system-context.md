@@ -3,45 +3,22 @@ name: system-context
 type: attention-context
 project: todo-list
 current_focus: todo-list
-updated: 2026-04-19
+updated: 2026-04-22
 ---
 
-# Фокус внимания на системах todo-list
+# Фокус внимания проекта todo-list
 
-Реестр систем, на которые пользователь переносил внимание.
-Текущая целевая система — корень репозитория `todo-list`.
+Реестр систем, на которые переносилось внимание.
+Текущая целевая система — корень репозитория.
 
 ## Таблица систем внимания
 
 | slug | role_vs_target | kind | last_focused_at | focus_count |
 |---|---|---|---|---|
-| todo-list | target | materialized | 2026-04-19 | 1 |
-| user-product-owner | creation_system | logical | 2026-04-19 | 1 |
-| ai-driven-sdlc | creation_system | logical | 2026-04-19 | 1 |
-
-## Границы целевой системы
-
-- **Целевая**: приложение `todo-list` как единая система.
-- **Надсистема**: не определена; pet-масштаб не требует.
-- **Подсистемы**: `domain`, `application`, `inbound-adapters` (React UI), `outbound-adapters` (localStorage). Источник: фаза architecture.
-- **Окружение**: браузер пользователя (DOM, localStorage API), GitHub Pages как среда доставки.
-- **Системы создания**: пользователь (product-owner/developer/tester), плагин `ai-driven-sdlc`.
+| todo-list | target | materialized | 2026-04-22 | 1 |
 
 ## Журнал фокусировок
 
-### 2026-04-19 — Bootstrap
-- Действие: focus.
-- slug: todo-list.
-- Мотив: корневая целевая система выбрана пользователем на старте.
-
-### 2026-04-19 — Уточнение подсистем после architecture
-- Действие: update.
-- slug: todo-list.
-- Мотив: фаза architecture определила подсистемы (domain, application, adapters).
-
-## Правила
-
-- Переход целевой смещает `current_focus`.
-- Прежняя целевая получает иную роль (supersystem / in_environment).
-- Для `kind=materialized` создаётся `<system-root>/README.sdlc.md` (Волна 2).
-- Для `kind=logical` описание живёт в `external-systems/<slug>.md`.
+| Дата | slug | Действие |
+|---|---|---|
+| 2026-04-22 | todo-list | focus |

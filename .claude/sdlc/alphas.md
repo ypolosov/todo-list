@@ -2,127 +2,43 @@
 name: alphas
 type: alpha-journal
 project: todo-list
-updated: 2026-04-19
+updated: 2026-04-22
 ---
 
 # Журнал состояний альф todo-list
 
 Единственный источник истины — агент `sdlc-alpha-tracker`.
-Другие агенты читают состояния только через трекер.
+Прочие агенты читают состояние только через трекер.
 
 ## Текущее состояние альф
 
 | Альфа | Состояние | Артефакт-свидетельство | Дата |
 |---|---|---|---|
-| Opportunity | Addressed | `.claude/sdlc/phases/operations/operations.md` | 2026-04-19 |
-| Stakeholders | Involved | `.claude/sdlc/phases/requirements/requirements.md` | 2026-04-19 |
-| Requirements | Acceptable | `.claude/sdlc/phases/testing/testing.md` | 2026-04-19 |
-| Software System | Operational | `.claude/sdlc/phases/operations/operations.md` | 2026-04-19 |
-| Work | Under Control | `.claude/sdlc/phases/development/development.md` | 2026-04-19 |
-| Team | Formed | `.claude/sdlc/roles.md` | 2026-04-19 |
-| Way of Working | Foundation Established | `.claude/sdlc/profile.md` | 2026-04-19 |
+| Opportunity | Value Established | `phases/vision/lean-canvas.md` | 2026-04-22 |
+| Stakeholders | Involved | `phases/requirements/todo.md` | 2026-04-22 |
+| Requirements | Addressed | `phases/testing/plan.md` | 2026-04-22 |
+| Software System | Ready | `phases/deployment/plan.md` + `.github/workflows/ci.yml` + `.github/workflows/deploy.yml` | 2026-04-22 |
+| Work | Under Control | `phases/development/plan.md` | 2026-04-22 |
+| Team | Seeded | `roles.md` | 2026-04-22 |
+| Way of Working | Principles Established | `plugin-config.md` | 2026-04-22 |
 
 ## Журнал переходов
 
-### 2026-04-19 — Bootstrap проекта
-
-- **Way of Working**: Principles Established → Foundation Established.
-  - Артефакты: `.claude/sdlc/profile.md`, `.claude/sdlc/plugin-config.md`.
-  - Причина: каркас SDLC создан, принципы зафиксированы.
-- **Team**: Seeded → Formed.
-  - Артефакт: `.claude/sdlc/roles.md` с ролью `product-owner`.
-  - Причина: активная роль выбрана пользователем.
-- **Stakeholders**: → Recognized.
-  - Артефакт: `.claude/sdlc/roles.md`.
-  - Причина: владелец продукта идентифицирован как стейкхолдер.
-- **Work**: → Initiated.
-  - Артефакт: `.claude/sdlc/tasks.md` (состояние задач).
-  - Причина: state-артефакт для Work-альфы настроен.
-
-### 2026-04-19 — Фаза Vision
-
-- **Opportunity**: Identified → Value Established (skip: Solution Needed).
-  - Артефакт: `.claude/sdlc/phases/vision/vision.md`.
-  - Роль: product-owner. Метод: product-discovery + mission-statement.
-  - Причина: миссия, проблема и не-цели зафиксированы; ценность установлена.
-- **Stakeholders**: Recognized → Represented.
-  - Артефакт: `.claude/sdlc/phases/vision/vision.md`.
-  - Роль: product-owner. Метод: product-discovery + mission-statement.
-  - Причина: единственный стейкхолдер назван и представлен в миссии.
-
-### 2026-04-19 — Фаза Requirements
-
-- **Requirements**: Conceived → Bounded.
-  - Артефакт: `.claude/sdlc/phases/requirements/requirements.md`.
-  - Роль: product-owner. Метод: requirements-engineering + feature-list-with-acceptance.
-  - Причина: 5 фич с критериями готовности зафиксированы; не-требования перечислены.
-- **Stakeholders**: Represented → Involved.
-  - Артефакт: `.claude/sdlc/phases/requirements/requirements.md`.
-  - Роль: product-owner. Метод: requirements-engineering + feature-list-with-acceptance.
-  - Причина: стейкхолдер вовлечён в определение MVP и его интересы зафиксированы.
-
-### 2026-04-19 — Фаза Architecture
-
-- **Software System**: — → Architecture Selected.
-  - Артефакт: `.claude/sdlc/phases/architecture/architecture.md`.
-  - Роль: product-owner (совмещает architect на pet-масштабе). Метод: software-architecture + structure-sketch.
-  - Причина: значимые решения A-01…A-05 зафиксированы; декомпозиция на domain/application/adapters; направление зависимостей определено; NFR названы.
-- **Requirements**: Bounded → Coherent.
-  - Артефакт: `.claude/sdlc/phases/architecture/architecture.md`.
-  - Роль: product-owner. Метод: software-architecture + structure-sketch.
-  - Причина: NFR уточнены (простота, целостность, проверяемость); функциональная декомпозиция согласована с F-01…F-05.
-  - Примечание: продвижение до Acceptable отложено до фазы Testing, где будет выполнена валидация критериев приёмки.
-
-### 2026-04-19 — Фаза Testing
-
-- **Requirements**: Coherent → Acceptable.
-  - Артефакт: `.claude/sdlc/phases/testing/testing.md`.
-  - Роль: developer. Метод: software-testing + test-strategy-pet.
-  - Причина: каждая фича F-01…F-05 имеет acceptance-контракт; пирамида тестов и coverage-gate определены.
-  - Примечание: Software System остаётся Architecture Selected до появления кода в фазе development.
-
-### 2026-04-19 — Фаза Development
-
-- **Software System**: Architecture Selected → Demonstrable.
-  - Артефакт: `.claude/sdlc/phases/development/development.md`.
-  - Роль: developer. Метод: software-construction + tdd-first-react-spa.
-  - Причина: код всех слоёв написан; 62 теста зелёные; покрытие domain/application 100%.
-  - Примечание: продвижение до Usable отложено до фазы Deployment, где пройдёт E2E в браузере.
-- **Work**: Initiated → Under Control (skip: Prepared, Started).
-  - Артефакт: `.claude/sdlc/phases/development/development.md`.
-  - Роль: developer. Метод: software-construction + tdd-first-react-spa.
-  - Причина: фазы пройдены последовательно; TDD-протокол соблюдён; метрики пробега зафиксированы.
-
-### 2026-04-19 — Фаза Deployment
-
-- **Software System**: Demonstrable → Ready.
-  - Артефакт: `.claude/sdlc/phases/deployment/deployment.md`.
-  - Роль: developer (совмещает devops). Метод: continuous-delivery + github-pages-via-actions.
-  - Причина: workflows `ci.yml` и `deploy.yml` написаны; build с `VITE_BASE=/todo-list/` успешен; стратегия отката описана.
-  - Примечание: продвижение до Operational отложено до первого успешного прогона GitHub Actions в реальной среде (push выполняет пользователь).
-
-### 2026-04-19 — Production-прогон
-
-- **Software System**: Ready → Operational.
-  - Свидетельство: GitHub Actions run 24626510735 (deploy) — completed success, 2026-04-19T10:03:32Z.
-  - Роль: developer. Метод: continuous-delivery + github-pages-via-actions.
-  - Причина: приложение развёрнуто на GitHub Pages и работает в реальной среде.
-
-### 2026-04-19 — Фаза Operations
-
-- **Opportunity**: Value Established → Addressed (skip: Viable).
-  - Артефакт: `.claude/sdlc/phases/operations/operations.md`.
-  - Свидетельство: продукт развёрнут и используется автором; цикл обратной связи описан.
-  - Роль: developer (совмещает sre и product-owner). Метод: site-reliability-engineering + manual-ops-playbook.
-  - Причина: возможность адресована работающим решением для автора-пользователя.
-  - Обоснование skip: pet-масштаб, один пользователь; решение доступно и работает.
-  - Примечание: Benefit Accrued откладывается до накопления метрики ценности через время использования.
-- **Software System**: остаётся Operational.
-  - Артефакт: `.claude/sdlc/phases/operations/operations.md`.
-  - Причина: состояние подтверждено фазой Operations; система в эксплуатации.
-
-## Правила
-
-- Переход альфы требует подтверждающего артефакта.
-- Без артефакта аудитор отклоняет продвижение.
-- Откат возможен с явной записью в журнале.
+| Дата | Альфа | Было | Стало | Артефакт |
+|---|---|---|---|---|
+| 2026-04-22 | Way of Working | — | Principles Established | `plugin-config.md` |
+| 2026-04-22 | Team | — | Seeded | `roles.md` |
+| 2026-04-22 | Stakeholders | — | Recognized | `roles.md` |
+| 2026-04-22 | Opportunity | Identified | Value Established | `phases/vision/lean-canvas.md` |
+| 2026-04-22 | Stakeholders | Recognized | Represented | `phases/vision/lean-canvas.md` |
+| 2026-04-22 | Requirements | Conceived | Bounded | `phases/requirements/todo.md` |
+| 2026-04-22 | Stakeholders | Represented | Involved | `phases/requirements/todo.md` |
+| 2026-04-22 | Work | — | Initiated | `tasks.md` |
+| 2026-04-22 | Software System | — | Architecture Selected | `phases/architecture/sketch.md` |
+| 2026-04-22 | Requirements | Bounded | Coherent | `phases/architecture/sketch.md` |
+| 2026-04-22 | Software System | Architecture Selected | Demonstrable | `phases/testing/plan.md` |
+| 2026-04-22 | Requirements | Coherent | Acceptable | `phases/testing/plan.md` |
+| 2026-04-22 | Software System | Demonstrable | Usable | `phases/development/plan.md` |
+| 2026-04-22 | Work | Initiated | Under Control | `phases/development/plan.md` |
+| 2026-04-22 | Requirements | Acceptable | Addressed | `phases/testing/plan.md` |
+| 2026-04-22 | Software System | Usable | Ready | `phases/deployment/plan.md` + `.github/workflows/ci.yml` + `.github/workflows/deploy.yml` |

@@ -5,487 +5,301 @@ project: todo-list
 updated: 2026-04-22
 ---
 
-# Журнал альтернатив и решений todo-list
+## 2026-04-22 15:15 — Deployment: среды, стратегия, rollback
 
-Принцип 1: альтернативы всегда порождаются и фиксируются.
-
-## 2026-04-19 10:00 — Масштаб проекта
-
-- context: инициализация SDLC-каркаса; нужно зафиксировать уровень процесса.
+- context: параметры CI/CD pipeline для todo-list.
 - autonomy_mode: hitl
-- phase: bootstrap
-- role: product-owner
+- phase: deployment
+- role: architect
 - alternatives:
-  1. pet — минимальный процесс, один исполнитель, низкие риски.
-  2. mid — небольшая команда, умеренный процесс, ощутимые риски качества.
-  3. enterprise — кросс-функциональная команда, регуляторика, полный SDLC.
+  1. 1 среда (prod) + auto-deploy при merge в main + git revert для отката.
+  2. 2 среды (preview+prod) + deploy по тегам v*; сложнее для pet.
+  3. 3 среды (dev+staging+prod) + canary; избыточно.
 - choice: 1
-- rationale: один исполнитель, учебный/pet-формат, минимум церемониала.
-- traces_to: [`.claude/sdlc/profile.md`]
+- rationale: pet-демо без backend; секреты не нужны; минимум шагов.
+- ci_gates: tsc, eslint, prettier, vitest + coverage.
+- deploy_target: GitHub Pages через actions/deploy-pages@v4.
+- traces_to: [.claude/sdlc/phases/deployment/plan.md, .github/workflows/ci.yml, .github/workflows/deploy.yml]
 
-## 2026-04-19 10:01 — Активная роль
+## 2026-04-22 15:00 — Метод-инжиниринг: фаза deployment
 
-- context: роль пользователя влияет на предлагаемые фазы и вопросы.
-- autonomy_mode: hitl
-- phase: bootstrap
-- role: product-owner
+- context: выбор метода и инструмента деплоя статического веб-артефакта todo-list.
+- autonomy_mode: hootl (AskUserQuestion недоступен в subagent; auto mode).
+- phase: deployment
+- role: architect (devops не назначен; архитектор покрывает интерес)
+- sme_level: pet
 - alternatives:
-  1. product-owner — фокус на ценности, требованиях, приоритетах.
-  2. architect — фокус на значимых решениях и декомпозиции.
-  3. developer — фокус на TDD и воплощении требований.
+  1. static-site-ci-cd + github-actions+github-pages — репозиторий на GitHub, нулевая стоимость, нативный workflow для `dist/`.
+  2. static-site-ci-cd + netlify-cli+netlify — быстрый деплой с preview; внешний провайдер и аккаунт.
+  3. static-site-ci-cd + manual-rsync+any-static-host — ручной upload через scp/rsync; минимум автоматизации, но ломает воспроизводимость.
 - choice: 1
-- rationale: стартовая задача — определить ценность и границы продукта.
-- traces_to: [`.claude/sdlc/roles.md`, `.claude/sdlc/profile.md`]
+- rationale: pet-демо; репозиторий уже на GitHub; Pages + Actions дают воспроизводимый CI/CD без внешних провайдеров; артефакт `dist/` получается через `vite build`.
+- pipeline_outline: push в main → actions build (vite) → upload-pages-artifact → deploy-pages.
+- traces_to: [.claude/sdlc/profile.md, .claude/sdlc/phases/deployment/plan.md]
 
-## 2026-04-19 10:02 — Целевая система
+## 2026-04-22 14:30 — Development: git-модель и TDD-scope
 
-- context: граница системы определяется вниманием (принцип 7).
+- context: выбор git-workflow и области TDD-enforce для todo-list.
 - autonomy_mode: hitl
-- phase: bootstrap
-- role: product-owner
+- phase: development
+- role: architect
 - alternatives:
-  1. Корень репозитория todo-list как единая система.
-  2. Frontend-подсистема; backend — окружение.
-  3. Backend-подсистема; UI — окружение.
+  1. GitHub Flow + TDD-scope src/** (кроме test/d.ts/bootstrap).
+  2. Trunk-based + src/** кроме UI-слоя; ослабляет TDD-first.
+  3. Прямо в main + TDD только для task-service/task-store.
 - choice: 1
-- rationale: на старте нет деления на подсистемы; целевая — всё приложение.
-- traces_to: [`.claude/sdlc/system-context.md`]
+- rationale: CLAUDE.md фиксирует GitHub Flow; полный TDD-scope усиливает принцип 5.
+- tdd_exclusions: bootstrap.ts (startup glue без бизнес-логики).
+- traces_to: [.claude/sdlc/plugin-config.md, .claude/sdlc/phases/development/plan.md]
 
-## 2026-04-19 10:03 — State-артефакт для Work-альфы
+## 2026-04-22 14:45 — Development: разрешение конфликта Web + JSON-файл
 
-- context: плагин не навязывает формат состояния (принцип 9).
-- autonomy_mode: hitl
-- phase: bootstrap
-- role: product-owner
+- context: на Architecture пользователь выбрал web + JSON-файл FS; невозможно.
+- autonomy_mode: hitl (эскалация с фазы architecture)
+- phase: development
+- role: architect
 - alternatives:
-  1. Каталог `.claude/sdlc/phases/` с файлами по фазам — гранулярность, git-дружественно.
-  2. Одиночный файл `tasks.md` рядом с `alphas.md` — компактно, просто.
-  3. GitHub Issues через MCP — командная работа, внешняя зависимость.
+  1. localStorage с JSON-форматом через LocalStorageTaskStore.
+  2. IndexedDB для массивов; избыточно для 4 задач.
+  3. Отказ от персистентности; конфликт с R4.
+- choice: 1
+- rationale: JSON-формат сохранён; FS заменён на браузерный storage.
+- traces_to: [.claude/sdlc/phases/architecture/sketch.md, src/task-store.ts]
+
+## 2026-04-22 13:30 — Development: роль developer
+
+- context: фазе development нужна роль с интересом к реализации кода.
+- autonomy_mode: hootl (AskUserQuestion недоступен в subagent; auto mode).
+- phase: development
+- role: architect (покрывает интерес на pet-масштабе)
+- alternatives:
+  1. Оставить architect активной ролью; developer не добавлять.
+  2. Добавить developer; architect остаётся активной.
+  3. Переключиться на developer; architect становится неактивной.
+- choice: 1
+- rationale: pet-демо, один человек; developer как отдельная роль избыточен.
+- recommendation: пользователь может добавить developer командой `/sdlc-role add developer`.
+- traces_to: [.claude/sdlc/roles.md]
+
+## 2026-04-22 13:25 — Метод-инжиниринг: фаза development
+
+- context: выбор метода и инструментов фазы development для todo-list.
+- autonomy_mode: hootl (AskUserQuestion недоступен в subagent; auto mode).
+- phase: development
+- role: architect (developer не назначен; архитектор покрывает интерес)
+- sme_level: pet
+- alternatives:
+  1. tdd-scaffolding + npm + tsx + prettier + eslint — нативный Node, минимум зависимостей, TS без сборки.
+  2. tdd-scaffolding + pnpm + vite + biome — современный бандлер и единый линт/формат.
+  3. tdd-scaffolding + yarn + esbuild + dprint + eslint — компактная связка без vite.
+- choice: 1
+- rationale: pet-масштаб; vitest уже выбран, он использует vite внутри для тестов; npm предустановлен; tsx даёт запуск TS без сборки; prettier+eslint — индустриальный стандарт.
+- tdd_pairs: src/**/*.ts ↔ src/**/*.test.ts (принцип 5).
+- traces_to: [.claude/sdlc/profile.md, .claude/sdlc/phases/development/plan.md, .claude/sdlc/plugin-config.md]
+
+## 2026-04-22 13:05 — Testing: стратегия и fitness
+
+- context: пирамида тестов, coverage, contract-тесты, fitness-функции.
+- autonomy_mode: hitl
+- phase: testing
+- role: architect
+- alternatives:
+  1. Unit TaskService 100% + smoke UI + contract TaskStore + формат/линт/зелёные.
+  2. Только smoke всего кода; без coverage-порога.
+  3. Полная пирамида unit + integration + E2E; избыточно для pet.
+- choice: 1
+- rationale: TDD-first; чистая логика покрывается полностью; UI — smoke.
+- traces_to: [.claude/sdlc/phases/testing/plan.md, .claude/sdlc/alphas.md]
+
+## 2026-04-22 13:00 — Метод-инжиниринг: фаза testing
+
+- context: выбор метода и инструмента фазы testing для todo-list.
+- autonomy_mode: hootl (AskUserQuestion недоступен в subagent; auto mode).
+- phase: testing
+- role: architect (tester не добавлен; архитектор покрывает интерес)
+- sme_level: pet
+- alternatives:
+  1. unit-testing-with-mocks + vitest — zero-config TS, быстрый раннер, совместим с vanilla TS.
+  2. unit-testing-with-mocks + jest+ts-jest — классика, требует больше конфигурации.
+  3. unit-testing-with-mocks + node:test+tsx — встроенный раннер Node, минимум зависимостей.
+- choice: 1
+- rationale: pet-масштаб, TDD-first (принцип 5); vitest даёт TS без сборки и минимум церемоний.
+- traces_to: [.claude/sdlc/profile.md, .claude/sdlc/phases/testing/plan.md]
+
+## 2026-04-22 12:40 — Architecture: значимые решения
+
+- context: выбор воплощения, языка и персистентности для todo-list.
+- autonomy_mode: hitl
+- phase: architecture
+- role: architect
+- alternatives:
+  1. CLI + Python + JSON-файл — максимум простоты.
+  2. Web-страница + TypeScript + localStorage (JSON) — наглядное демо.
+  3. Клиент-сервер + TypeScript + SQLite — правдоподобнее, но раздутее.
 - choice: 2
-- rationale: pet-масштаб; минимальные накладные расходы; offline-friendly.
-- traces_to: [`.claude/sdlc/plugin-config.md`]
+- rationale: выбор пользователя: веб-страница + TypeScript; JSON в localStorage.
+- conflicts_resolved: веб vs. JSON-файл FS → localStorage с JSON-форматом.
+- traces_to: [.claude/sdlc/phases/architecture/sketch.md, .claude/sdlc/alphas.md]
 
-## 2026-04-19 10:10 — Следующий шаг после bootstrap
+## 2026-04-22 12:35 — Architecture: смена активной роли
 
-- context: bootstrap завершён; роль product-owner активна.
+- context: фазу architecture ведёт роль architect; product-owner сохраняется.
 - autonomy_mode: hitl
 - phase: cross-cutting
-- role: product-owner
+- role: architect
 - alternatives:
-  1. `/sdlc-phase vision` — продвинуть Opportunity от Identified, прояснить ценность.
-  2. `/sdlc-phase requirements` — декомпозиция без Vision; риск: цели не зафиксированы.
-  3. `/sdlc-focus` — уточнить границы системы до содержательных фаз.
+  1. Добавить architect к активным ролям; product-owner остаётся.
+  2. Заменить product-owner на architect.
+  3. Оставить product-owner; architect формально не назначать.
 - choice: 1
-- rationale: Opportunity ещё Identified; Vision — штатный первый шаг для product-owner.
-- traces_to: [`.claude/sdlc/alphas.md`, `.claude/sdlc/tasks.md`]
+- rationale: pet-проект; один человек играет обе роли.
+- traces_to: [.claude/sdlc/roles.md]
 
-## 2026-04-19 10:20 — SME для фазы vision
+## 2026-04-22 12:30 — Метод-инжиниринг: фаза architecture
 
-- context: вход в фазу vision; выбрать уровень и форму артефакта.
-- autonomy_mode: hitl
-- phase: vision
-- role: product-owner
+- context: выбор метода и инструмента фазы architecture для todo-list.
+- autonomy_mode: hootl (AskUserQuestion недоступен в subagent).
+- phase: architecture
+- role: architect
+- sme_level: pet
 - alternatives:
-  1. pet + свободный `vision.md` — один экран, минимум структуры.
-  2. pet + миссия продукта — одно ёмкое заявление о цели.
-  3. mid + лифтовый питч по шаблону «для кого / что / зачем».
-- choice: 2
-- rationale: pet-масштаб; миссия даёт короткую якорную формулировку.
-- traces_to: [`.claude/sdlc/phases/vision/vision.md`, `.claude/sdlc/profile.md`]
+  1. lightweight-architecture-sketch + md-architecture-sketch — одностраничная схема компонентов и решений.
+  2. c4-model-lite + md-c4-context — контекст и контейнеры по модели C4.
+  3. adr-only + md-adr-log — только журнал архитектурных решений без общей схемы.
+- choice: 1
+- rationale: pet-демо; одностраничный sketch даёт структуру без накладных расходов.
+- traces_to: [.claude/sdlc/profile.md, .claude/sdlc/phases/architecture/sketch.md]
 
-## 2026-04-19 10:21 — Содержание Vision
+## 2026-04-22 12:05 — Requirements: содержание и DoD
 
-- context: зафиксировать проблему, стейкхолдера и горизонт.
-- autonomy_mode: hitl
-- phase: vision
-- role: product-owner
-- alternatives:
-  1. Продуктовая ценность для широкой аудитории — облако, синхронизация.
-  2. Локальный инструмент для личных задач — простота, own-your-data.
-  3. Учебный полигон для SDLC — предмет вторичен, главное процесс.
-- choice: 3
-- rationale: явно выбран пользователем; честно отражает мотивацию.
-- traces_to: [`.claude/sdlc/phases/vision/vision.md`]
-
-## 2026-04-19 10:30 — SME для фазы requirements
-
-- context: вход в фазу requirements; выбор формы артефакта.
+- context: определение MVP и DoD для фазы requirements todo-list.
 - autonomy_mode: hitl
 - phase: requirements
 - role: product-owner
 - alternatives:
-  1. pet + список фич с критериями — компактно, минимум формальности.
-  2. mid + user stories с acceptance criteria — стандартный шаблон, больше структуры.
-  3. mid + use cases — сценарии взаимодействия по шагам.
+  1. Создать/отметить/удалить + DoD «функция + тест»; backlog в tasks.md.
+  2. Только create + list; минимум поведения; DoD без тестов.
+  3. CRUD + приоритеты + дедлайны; полный DoD с документацией.
 - choice: 1
-- rationale: pet-масштаб; простой табличный формат соответствует нагрузке.
-- traces_to: [`.claude/sdlc/phases/requirements/requirements.md`, `.claude/sdlc/profile.md`]
+- rationale: узнаваемый учебный сюжет, совместим с TDD-first (принцип 5).
+- traces_to: [.claude/sdlc/phases/requirements/todo.md, .claude/sdlc/tasks.md, .claude/sdlc/alphas.md]
 
-## 2026-04-19 10:31 — Объём MVP
+## 2026-04-22 12:00 — Метод-инжиниринг: фаза requirements
 
-- context: нужно зафиксировать границы MVP до архитектуры.
-- autonomy_mode: hitl
+- context: выбор метода и инструмента фазы requirements для todo-list.
+- autonomy_mode: hootl (AskUserQuestion недоступен в subagent).
 - phase: requirements
 - role: product-owner
+- sme_level: pet
 - alternatives:
-  1. CRUD-минимум — добавить / отметить выполненной / удалить.
-  2. CRUD + фильтр по статусу (активные / выполненные / все).
-  3. CRUD + фильтр + приоритет / дедлайн.
-- choice: 2
-- rationale: фильтр дёшев и добавляет ценность; приоритеты отложены.
-- traces_to: [`.claude/sdlc/phases/requirements/requirements.md`]
-
-## 2026-04-19 10:40 — Технологический стек
-
-- context: выбор стека до архитектурной декомпозиции.
-- autonomy_mode: hitl
-- phase: architecture
-- role: product-owner
-- alternatives:
-  1. CLI на Python — нулевой порог, JSON-хранилище.
-  2. Web SPA (React + localStorage) — без бэкенда, браузер везде.
-  3. CLI на Go — один бинарь, кросс-платформенно.
-- choice: 2
-- rationale: явный выбор пользователя; SPA даёт простую развёртку.
-- traces_to: [`.claude/sdlc/phases/architecture/architecture.md`]
-
-## 2026-04-19 10:41 — Архитектурный стиль
-
-- context: определить стиль до реализации.
-- autonomy_mode: hitl
-- phase: architecture
-- role: product-owner
-- alternatives:
-  1. Без стиля (вся логика в компонентах React).
-  2. Слоистая архитектура (view/controller/data).
-  3. Модульный монолит + hexagonal + DDD-lite.
-- choice: 3
-- rationale: явный выбор пользователя; чистые границы domain от UI и storage.
-- traces_to: [`.claude/sdlc/phases/architecture/architecture.md`]
-
-## 2026-04-19 10:42 — Качественные атрибуты
-
-- context: критичные NFR для pet-приложения.
-- autonomy_mode: hitl
-- phase: architecture
-- role: product-owner
-- alternatives:
-  1. Простота + целостность данных — основное для личного инструмента.
-  2. Скорость и отклик — оптимизация под большие списки.
-  3. Расширяемость — приоритет гибкости над простотой.
+  1. flat-todo-list + md-flat-todo — плоский список желаемого поведения.
+  2. freeform-user-stories + md-user-stories — свободные истории без AC.
+  3. note-backlog + md-backlog — бэклог заметок в одном файле.
 - choice: 1
-- rationale: явный выбор пользователя; целостность блокирует потерю задач.
-- traces_to: [`.claude/sdlc/phases/architecture/architecture.md`]
+- rationale: pet-демо; плоский список минимизирует накладные расходы.
+- traces_to: [.claude/sdlc/profile.md, .claude/sdlc/phases/requirements/todo.md]
 
-## 2026-04-19 10:50 — Смена роли для реализации
+## 2026-04-22 11:25 — Vision: содержание Lean Canvas
 
-- context: архитектура готова; требуется роль для testing/development.
+- context: наполнение ключевых блоков Lean Canvas для todo-list.
+- autonomy_mode: hitl
+- phase: vision
+- role: product-owner
+- alternatives:
+  1. Бенефициар = докладчик + аудитория; проблема = живое демо AI-SDLC.
+  2. Бенефициар = конечный пользователь todo; продуктовый фокус.
+  3. Бенефициар = сообщество плагина; эталонный пример метода.
+- choice: 1
+- rationale: README фиксирует todo-list как учебное демо для доклада.
+- traces_to: [.claude/sdlc/phases/vision/lean-canvas.md, .claude/sdlc/alphas.md]
+
+## 2026-04-22 11:20 — Метод-инжиниринг: фаза vision
+
+- context: выбор метода и инструмента фазы vision для todo-list.
+- autonomy_mode: hootl (auto-режим; интерактив не доступен).
+- phase: vision
+- role: product-owner
+- sme_level: pet
+- alternatives:
+  1. lean-canvas + md-lean-canvas — одностраничник ценности и сегментов.
+  2. opportunity-canvas + md-opportunity-canvas — фокус на проблеме и решении.
+  3. elevator-pitch + md-elevator-pitch — минимальный pitch идеи.
+- choice: 1
+- rationale: демо-проект; Lean Canvas балансирует полноту и лаконичность.
+- traces_to: [.claude/sdlc/profile.md, .claude/sdlc/phases/vision/lean-canvas.md]
+
+## 2026-04-22 11:10 — Continue: следующая фаза SDLC
+
+- context: post-bootstrap выбор фазы для роли product-owner.
 - autonomy_mode: hitl
 - phase: cross-cutting
 - role: product-owner
 - alternatives:
-  1. Добавить developer + tester, запустить `/sdlc-phase testing` (TDD-first).
-  2. Добавить developer, сразу `/sdlc-phase development` (нарушает TDD-first).
-  3. Остаться product-owner, `/sdlc-focus` на подсистему.
+  1. /sdlc-phase vision — продвинуть Opportunity и Stakeholders.
+  2. /sdlc-phase requirements — напрямую к требованиям без Vision.
+  3. /sdlc-focus на подсистему — сменить целевую до фазы.
 - choice: 1
-- rationale: принцип 5 TDD-first; pet-масштаб допускает совмещение ролей.
-- traces_to: [`.claude/sdlc/roles.md`]
+- rationale: Opportunity в начальном состоянии; логичный старт pet-проекта.
+- traces_to: [.claude/sdlc/phases/vision]
 
-## 2026-04-19 11:00 — Стратегия тестирования
+# Журнал решений todo-list
 
-- context: TDD-first вход; нужна пирамида тестов и инструменты.
+Журнал альтернатив и принятых решений (принцип 1).
+Запись создаётся на каждое значимое решение SDLC.
+
+## 2026-04-22 11:00 — Bootstrap: масштаб проекта
+
+- context: выбор уровня формализма для todo-list при `/sdlc-init`.
 - autonomy_mode: hitl
-- phase: testing
-- role: developer
-- alternatives:
-  1. Только unit на domain/application — быстро, но без UI-проверки.
-  2. Domain unit + smoke E2E — баланс цены и доверия.
-  3. Только E2E через браузер — дорого, медленно, слабая изоляция.
-- choice: 2
-- rationale: domain изолирован, E2E покрывает сквозной сценарий.
-- traces_to: [`.claude/sdlc/phases/testing/testing.md`, `.claude/sdlc/plugin-config.md`]
-
-## 2026-04-19 11:01 — Инструменты тестирования
-
-- context: стек React+TS; выбор runner и E2E.
-- autonomy_mode: hitl
-- phase: testing
-- role: developer
-- alternatives:
-  1. Vitest + React Testing Library + Playwright.
-  2. Jest + React Testing Library + Cypress.
-  3. Playwright component + E2E как единый инструмент.
-- choice: 1
-- rationale: Vitest нативен для Vite-стека; быстрый запуск.
-- traces_to: [`.claude/sdlc/phases/testing/testing.md`, `.claude/sdlc/plugin-config.md`]
-
-## 2026-04-19 11:02 — Coverage-gate
-
-- context: гранулярность порога покрытия.
-- autonomy_mode: hitl
-- phase: testing
-- role: developer
-- alternatives:
-  1. Нет порога — метрика только для сведения.
-  2. Domain/application 100 %; адаптеры без порога.
-  3. Весь проект ≥ 80 %.
-- choice: 2
-- rationale: domain и application чисто тестируются; UI/storage — интеграционно.
-- traces_to: [`.claude/sdlc/plugin-config.md`]
-
-## 2026-04-19 11:30 — Bundler и package manager
-
-- context: нужны build-tool и менеджер пакетов.
-- autonomy_mode: hitl
-- phase: development
-- role: developer
-- alternatives:
-  1. Vite + npm — современный, нативен для Vitest.
-  2. CRA + npm — устаревший и деприкацирован.
-  3. Next.js + npm — избыточно для статичной SPA.
-- choice: 1
-- rationale: явный выбор пользователя; Vite + Vitest дают единый stack.
-- traces_to: [`package.json`, `vite.config.ts`]
-
-## 2026-04-19 11:31 — TDD-цикл
-
-- context: как организовать прогон тесты→код.
-- autonomy_mode: hitl
-- phase: development
-- role: developer
-- alternatives:
-  1. Red-Green-Refactor по фиче — канонический TDD.
-  2. Test-first по слою — все тесты слоя, затем весь код слоя.
-  3. Batch: все тесты → весь код.
-- choice: 1
-- rationale: явный выбор пользователя; короткие циклы дают быструю обратную связь.
-- traces_to: [`.claude/sdlc/phases/development/development.md`]
-
-## 2026-04-19 11:45 — Следующий шаг после development
-
-- context: код написан, тесты зелёные; нужен путь до Usable.
-- autonomy_mode: hitl
-- phase: cross-cutting
-- role: developer
-- alternatives:
-  1. `/sdlc-phase deployment` — сборка, запуск, публикация.
-  2. `/sdlc-audit` — проверить консистентность до развёртывания.
-  3. `/sdlc-phase operations` — сразу к эксплуатации (пропуск deployment).
-- choice: 1
-- rationale: естественный порядок; Software System требует среды для запуска.
-- traces_to: [`.claude/sdlc/tasks.md`]
-
-## 2026-04-19 12:00 — Хостинг и CI/CD
-
-- context: статичная SPA; нужна бесплатная среда и автоматизация.
-- autonomy_mode: hitl
-- phase: deployment
-- role: developer
-- alternatives:
-  1. GitHub Pages + GitHub Actions — бесплатно, уже в экосистеме GitHub Flow.
-  2. Netlify / Vercel / Cloudflare Pages — PaaS с preview-URL, требует учётки.
-  3. Только локальный запуск — без хостинга.
-- choice: 1
-- rationale: явный выбор пользователя; минимум внешних зависимостей.
-- traces_to: [`.github/workflows/ci.yml`, `.github/workflows/deploy.yml`]
-
-## 2026-04-19 12:01 — Стратегия отката
-
-- context: как возвращать предыдущую версию при инциденте.
-- autonomy_mode: hitl
-- phase: deployment
-- role: developer
-- alternatives:
-  1. `git revert` + автодеплой — идёт через обычный pipeline.
-  2. Ручной redeploy старого sha через workflow_dispatch.
-  3. Без rollback — fix forward.
-- choice: 1
-- rationale: явный выбор пользователя; обратимо, ~2 минуты до выката.
-- traces_to: [`.claude/sdlc/phases/deployment/deployment.md`]
-
-## 2026-04-19 12:20 — Наблюдаемость и обратная связь
-
-- context: продукт в Operational; нужна минимальная ops-модель.
-- autonomy_mode: hitl
-- phase: operations
-- role: developer
-- alternatives:
-  1. Ручная проверка URL + GitHub Issues как канал обратной связи.
-  2. UptimeRobot / cron-ping + email alert.
-  3. Pingdom + аналитика (Plausible/GA) + дашборд.
-- choice: 1
-- rationale: явный выбор пользователя; нет внешних зависимостей; pet-масштаб.
-- traces_to: [`.claude/sdlc/phases/operations/operations.md`]
-
-## 2026-04-19 12:21 — Реакция на инциденты
-
-- context: нужен процесс отката и фиксации инцидентов.
-- autonomy_mode: hitl
-- phase: operations
-- role: developer
-- alternatives:
-  1. Revert + 1-строчный postmortem в `decisions.md`.
-  2. Отдельный артефакт на каждый инцидент (timeline, 5-whys).
-  3. Fix-forward без записей.
-- choice: 1
-- rationale: явный выбор пользователя; лёгкая трассируемость без формализма.
-- traces_to: [`.claude/sdlc/phases/operations/operations.md`]
-
-## 2026-04-19 13:45 — Применение фиксов аудита
-
-- context: `/sdlc-audit` обнаружил 4 расхождения (2 important, 2 note).
-- autonomy_mode: hitl
-- phase: cross-cutting
-- role: developer
-- alternatives:
-  1. Применить все 4 фикса по рекомендации аудитора (альтернатива 1 каждый).
-  2. Применить только important (I-01, I-02); два note отложить.
-  3. Оставить отчёт без изменений.
-- choice: 1
-- rationale: фиксы локальные, метаданные, повышают согласованность каркаса.
-- traces_to: [все `phases/*/*.md`, `system-context.md`, `roles.md`, `audit.md`]
-
-## 2026-04-19 14:30 — Актуализация под плагин 0.2.1
-
-- context: апгрейд `ai-driven-sdlc` 0.2.0 → 0.2.1; механизма миграций нет.
-- autonomy_mode: hitl
-- phase: cross-cutting
-- role: developer
-- changes_in_plugin:
-  - `.mcp.json`: убран `context7` (конфликт с dedicated плагином).
-  - `.github/ISSUE_TEMPLATE/work-unit.yml`: новый шаблон для Work-альфы.
-  - README, CHANGELOG: документационные обновления.
-  - skills/catalogs/agents/hooks/scripts: без изменений.
-- alternatives:
-  1. Скопировать `work-unit.yml` в проект; зафиксировать апгрейд.
-  2. Только зафиксировать апгрейд; шаблон не копировать.
-  3. Игнорировать апгрейд до накопления значимых изменений.
-- choice: 1
-- rationale: шаблон согласован с operations.md (GitHub Issues как канал feedback).
-- traces_to: [`.github/ISSUE_TEMPLATE/work-unit.yml`, `.claude/sdlc/tasks.md`]
-
-## 2026-04-19 14:31 — Не вендорить плагинный .mcp.json
-
-- context: 0.2.1 убрал `context7` из `.mcp.json` плагина; конфликт с dedicated.
-- autonomy_mode: hitl
-- phase: cross-cutting
-- role: developer
-- alternatives:
-  1. Не вендорить `.mcp.json` в проект; полагаться на user-scope плагины.
-  2. Скопировать обновлённый `.mcp.json` в корень проекта.
-  3. Создать собственный `.mcp.json` с подмножеством серверов.
-- choice: 1
-- rationale: `context7@claude-plugins-official` уже установлен user-scope; дублирование не нужно.
-- traces_to: []
-- evidence: отсутствие `.mcp.json` в корне проекта подтверждает решение.
-
-## 2026-04-19 14:50 — Источник истины для plugin_version
-
-- context: аудит I-05/I-06 — версия плагина рассинхронизирована между CLAUDE.md и журналами.
-- autonomy_mode: hitl
-- phase: cross-cutting
-- role: developer
-- alternatives:
-  1. `plugin-config.md` — отделить версию плагина от схемы конфига; единый источник.
-  2. `CLAUDE.md` — конституция как декларативный носитель версии.
-  3. Не фиксировать; принять статус warn.
-- choice: 1
-- rationale: `plugin-config.md` уже точка интеграции с hooks; ниже риск дрейфа.
-- traces_to: [`.claude/sdlc/plugin-config.md`, `.claude/CLAUDE.md`, `.claude/sdlc/audit.md`]
-- evidence: убрано поле `plugin_version` из CLAUDE.md, decisions.md, tasks.md.
-
-## 2026-04-19 14:51 — Связность задачи актуализации
-
-- context: аудит I-07 — циркулярная ссылка в 14:31 + отсутствие `traces_from` в задаче.
-- autonomy_mode: hitl
-- phase: cross-cutting
-- role: developer
-- alternatives:
-  1. Добавить `traces_from` в задачу; убрать циркулярную ссылку (заменить на `[]`).
-  2. Только текстовая пометка без поля.
-  3. Не трогать; формат `tasks.md` исторически без обратных следов.
-- choice: 1
-- rationale: формализация связки ускоряет impact-анализ; затраты минимальны.
-- traces_to: [`.claude/sdlc/tasks.md`, `.claude/sdlc/decisions.md`]
-
-## 2026-04-22 11:20 — Аудит I-01: рассинхронизация Stakeholders в external-system
-
-- context: `/sdlc-audit --apply` — I-01 important. Локальная таблица `external-systems/user-product-owner.md` рапортовала `Stakeholders = Recognized`, трекер — `Involved`.
-- autonomy_mode: hitl
-- phase: cross-cutting
+- phase: bootstrap
 - role: product-owner
 - alternatives:
-  1. Обновить локальную таблицу: `Stakeholders = Involved`, свидетельство `requirements.md`.
-  2. Убрать состояния из external-system, оставить только ссылку на `alphas.md`.
-  3. Пометить как автогенерируемое и добавить задачу в backlog.
+  1. pet — минимум формализма; подходит для учебного/личного проекта.
+  2. mid — умеренная формализация; подходит командам 3–10 человек.
+  3. enterprise — полный набор артефактов; регуляторика и аудируемость.
 - choice: 1
-- rationale: минимальная правка, синхронизирует с трекером, сохраняет локальный быстрый обзор.
-- traces_to: [`.claude/sdlc/external-systems/user-product-owner.md`, `.claude/sdlc/audit.md`]
-- evidence: `external-systems/user-product-owner.md` строка 30 — `Involved`; `updated: 2026-04-22`.
+- rationale: README описывает todo-list как учебное демо для доклада.
+- traces_to: [.claude/sdlc/profile.md]
 
-## 2026-04-22 11:21 — Аудит I-02: устаревшее поле updated в tasks.md
+## 2026-04-22 11:01 — Bootstrap: активная роль
 
-- context: `/sdlc-audit --apply` — I-02 important. `tasks.md.updated: 2026-04-19`, но записи 14:50/14:51 в `decisions.md` правили `tasks.md`.
+- context: кто ведёт проект на старте bootstrap.
 - autonomy_mode: hitl
-- phase: cross-cutting
+- phase: bootstrap
+- role: (выбирается)
+- alternatives:
+  1. product-owner — старт с фазы vision; ценность и стейкхолдеры.
+  2. architect — требует готовых vision и requirements.
+  3. developer — требует готовой архитектуры.
+  4. method-engineer — сквозная роль эволюции практик.
+- choice: 1
+- rationale: логичный старт pet-проекта — ценность и требования.
+- traces_to: [.claude/sdlc/roles.md]
+
+## 2026-04-22 11:02 — Bootstrap: целевая система
+
+- context: какая система считается целевой на старте.
+- autonomy_mode: hitl
+- phase: bootstrap
 - role: product-owner
 - alternatives:
-  1. Обновить `updated: 2026-04-22` вручную; зафиксировать sync metadata после аудита.
-  2. Автоматизировать через hook, подбивающий `updated` по `git log -1 --format=%cs`.
-  3. Оставить как есть, полагаясь на git-историю.
+  1. todo-list (корень репозитория) — стандарт монорепо.
+  2. todo-list/backend — если ожидается клиент-сервер.
+  3. todo-list/cli — если сразу ясно, что это CLI-утилита.
 - choice: 1
-- rationale: минимальная правка сейчас; автоматизацию — в backlog.
-- traces_to: [`.claude/sdlc/tasks.md`, `.claude/sdlc/audit.md`]
-- evidence: `tasks.md` frontmatter `updated: 2026-04-22`.
+- rationale: на старте архитектура неизвестна; корень — безопасный default.
+- traces_to: [.claude/sdlc/system-context.md, README.sdlc.md]
 
-## 2026-04-22 11:22 — Аудит N-01: 15-word false positive на заголовках
+## 2026-04-22 11:03 — Bootstrap: state-артефакт
 
-- context: `/sdlc-audit --apply` — N-01 note. `validate-artifact.sh` трактует длинные заголовки как утверждения.
+- context: где хранить состояние работ (Work-альфа, принцип 9).
 - autonomy_mode: hitl
-- phase: cross-cutting
+- phase: bootstrap
 - role: product-owner
 - alternatives:
-  1. Оставить как есть; false positive задокументирован в `audit.md`.
-  2. Добавить `exempt_patterns` локально для трёх файлов.
-  3. Переформулировать заголовки короче.
+  1. file: `.claude/sdlc/tasks.md` — одиночный markdown-файл.
+  2. dir: `.claude/sdlc/tasks/` — каталог с файлом на задачу.
+  3. mcp: GitHub Issues — задачи в трекере через MCP.
 - choice: 1
-- rationale: исправление скрипта — задача плагина, не target-проекта. Локальные исключения добавят шум.
-- traces_to: [`.claude/sdlc/audit.md`]
-- evidence: статус `note`, нет изменений в артефактах.
-
-## 2026-04-22 11:23 — Аудит N-02: traces_to в operations.md
-
-- context: `/sdlc-audit --apply` — N-02 note. Пустой `traces_to` при описании feedback-цикла в тексте.
-- autonomy_mode: hitl
-- phase: cross-cutting
-- role: product-owner
-- alternatives:
-  1. Добавить в `traces_to` путь к `vision.md` с пометкой feedback cycle.
-  2. Ввести отдельное поле `traces_feedback`; требует правки мета-шаблона плагина.
-  3. Оставить как есть; считать комментарий в тексте достаточным.
-- choice: 1
-- rationale: формализует обратный поток без модификации мета-шаблона плагина.
-- traces_to: [`.claude/sdlc/phases/operations/operations.md`, `.claude/sdlc/audit.md`]
-- evidence: `operations.md` — `traces_to: [.claude/sdlc/phases/vision/vision.md]`.
-
-## 2026-04-22 11:24 — Аудит N-03: version_source в ai-driven-sdlc.md
-
-- context: `/sdlc-audit --apply` — N-03 note. External-system без привязки к версии плагина; при апгрейде не подсвечивается в impact-анализе.
-- autonomy_mode: hitl
-- phase: cross-cutting
-- role: product-owner
-- alternatives:
-  1. Добавить `version_source: .claude/sdlc/plugin-config.md` в frontmatter + упоминание в секции 1.
-  2. Жёстко прописать `plugin_version: 0.2.1` (противоречит 14:50 от 2026-04-19).
-  3. Оставить без изменений.
-- choice: 1
-- rationale: ссылка на источник без дублирования значения; соблюдает контракт 14:50.
-- traces_to: [`.claude/sdlc/external-systems/ai-driven-sdlc.md`, `.claude/sdlc/audit.md`]
-- evidence: `ai-driven-sdlc.md` frontmatter — `version_source: .claude/sdlc/plugin-config.md`.
-
-## Правила
-
-- Минимум 2 альтернативы; оптимально 3.
-- HITL/HOTL — запись после подтверждения пользователя.
-- HOOTL — запись автономно до действия.
-- Задним числом выбор не переписывается; только новая запись.
+- rationale: pet-проект; объём задач небольшой, плоский файл удобнее.
+- traces_to: [.claude/sdlc/plugin-config.md, .claude/sdlc/tasks.md]

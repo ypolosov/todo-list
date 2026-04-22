@@ -4,48 +4,56 @@ type: system-readme
 kind: materialized
 role_vs_target: target
 project: todo-list
-last_focused_at: 2026-04-19
+last_focused_at: 2026-04-22
 focus_count: 1
-updated: 2026-04-19
+updated: 2026-04-22
 ---
 
-# README системы todo-list
+# Система внимания: todo-list
+
+Sidecar-описание целевой системы проекта todo-list.
+Живёт рядом с корневым `README.md`; не заменяет его.
 
 ## 1. Назначение и границы
 
-Приложение `todo-list` как единая целевая система на старте SDLC.
-Запись: `.claude/sdlc/system-context.md`.
+todo-list — учебное приложение для демо доклада «AI-driven SDLC».
+Граница системы — корень репозитория: код, конфигурация, артефакты SDLC.
+Запись в реестре: `system-context.md` (slug `todo-list`).
 
 ## 2. Текущий фокус
 
-- Роль относительно целевой: `target`.
-- Последний фокус: 2026-04-19.
-- Число фокусировок: 1.
+- role_vs_target: `target`.
+- last_focused_at: 2026-04-22.
+- focus_count: 1.
 
 ## 3. Состояние альф относительно системы
 
-Данные получаются через `sdlc-alpha-tracker`.
-
 | Альфа | Состояние | Артефакт-свидетельство |
 |---|---|---|
-| Opportunity | Identified | — |
+| Opportunity | — | — |
 | Stakeholders | Recognized | `.claude/sdlc/roles.md` |
-| Requirements | Conceived | — |
+| Requirements | — | — |
 | Software System | — | — |
-| Work | Initiated | `.claude/sdlc/tasks.md` |
-| Team | Formed | `.claude/sdlc/roles.md` |
-| Way of Working | Foundation Established | `.claude/sdlc/profile.md` |
+| Work | — | — |
+| Team | Seeded | `.claude/sdlc/roles.md` |
+| Way of Working | Principles Established | `.claude/sdlc/plugin-config.md` |
+
+Источник истины — агент `sdlc-alpha-tracker` (принцип 13).
 
 ## 4. Связанные артефакты SDLC
 
-- Профиль SME: `.claude/sdlc/profile.md`.
-- Конфиг hooks: `.claude/sdlc/plugin-config.md`.
-- Журнал альф: `.claude/sdlc/alphas.md`.
-- Журнал решений: `.claude/sdlc/decisions.md`.
-- Состояние задач: `.claude/sdlc/tasks.md`.
+- `.claude/sdlc/profile.md` — SME-профиль фаз.
+- `.claude/sdlc/plugin-config.md` — конфиг hooks.
+- `.claude/sdlc/alphas.md` — состояние альф.
+- `.claude/sdlc/decisions.md` — журнал альтернатив.
+- `.claude/sdlc/tasks.md` — state-артефакт Work-альфы.
+
+Артефакты фаз добавляются по ходу `/sdlc-phase`.
 
 ## 5. Роли, активные в системе
 
-- `product-owner` — Владелец продукта.
-  - Интересы: ценность, приоритеты, метрики.
-  - Определение: `catalogs/roles.md` плагина.
+| Роль | Интересы |
+|---|---|
+| product-owner | ценность, стейкхолдеры, приоритеты фичей |
+
+Каталог ролей — `catalogs/roles.md` плагина.

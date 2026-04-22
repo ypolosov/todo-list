@@ -1,4 +1,4 @@
-name: ci
+name: CI
 
 on:
   push:
@@ -6,20 +6,17 @@ on:
   pull_request:
     branches: [main]
 
-permissions:
-  contents: read
-
 jobs:
-  verify:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
       - run: npm ci
       - run: npx tsc --noEmit
-      - run: npx prettier --check 'src/**/*.{ts,tsx,css}' '*.md'
-      - run: npx eslint 'src/**/*.{ts,tsx}'
+      - run: npx eslint src/
+      - run: npx prettier --check src/
       - run: npx vitest run --coverage
