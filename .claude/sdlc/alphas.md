@@ -14,13 +14,13 @@ updated: 2026-04-23
 
 | Альфа | Состояние | Артефакт-свидетельство | Дата |
 |---|---|---|---|
-| Opportunity | Value Established | phases/vision/vision.md | 2026-04-22 |
+| Opportunity | Viable | phases/operations/operations.md | 2026-04-23 |
 | Stakeholders | Involved | phases/requirements/requirements.md | 2026-04-22 |
 | Requirements | Acceptable | phases/testing/testing.md | 2026-04-22 |
-| Software System | Ready | phases/deployment/deployment.md, .github/workflows/deploy.yml, .github/workflows/e2e.yml, vite.config.ts | 2026-04-23 |
+| Software System | Operational | phases/operations/operations.md | 2026-04-23 |
 | Work | Under Control | phases/deployment/deployment.md, .github/workflows/deploy.yml, .github/workflows/e2e.yml, vite.config.ts | 2026-04-23 |
 | Team | Formed | roles.md | 2026-04-22 |
-| Way of Working | Foundation Established | profile.md, plugin-config.md | 2026-04-22 |
+| Way of Working | In Use | phases/operations/operations.md | 2026-04-23 |
 
 ## 2. Журнал переходов
 
@@ -43,3 +43,6 @@ updated: 2026-04-23
 | 2026-04-23 | Software System | Demonstrable | Usable | phases/development/development.md, src/adapters/ui/**, tests/e2e/add-toggle-remove.spec.ts |
 | 2026-04-23 | Software System | Usable | Ready | phases/deployment/deployment.md, .github/workflows/deploy.yml, .github/workflows/e2e.yml, vite.config.ts |
 | 2026-04-23 | Work | Started | Under Control | phases/deployment/deployment.md, .github/workflows/deploy.yml, .github/workflows/e2e.yml, vite.config.ts |
+| 2026-04-23 | Software System | Ready | Operational | phases/operations/operations.md (прод-URL https://ypolosov.github.io/todo-list/ + скриншот пользователя) |
+| 2026-04-23 | Opportunity | Value Established | Viable | phases/operations/operations.md (ценность подтверждена прод-использованием) |
+| 2026-04-23 | Way of Working | Foundation Established | In Use | phases/operations/operations.md (плагин применён сквозно через 7 фаз) |

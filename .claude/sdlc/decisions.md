@@ -666,3 +666,59 @@ updated: 2026-04-22
 - choice: 1
 - rationale: pipeline валиден и воспроизводим локально; Operational ждёт реального run.
 - traces_to: [alphas.md, phases/deployment/deployment.md]
+
+## 2026-04-23 19:00 — Стратегия наблюдаемости на pet
+
+- context: как отслеживать прод-состояние SPA на GitHub Pages.
+- autonomy_mode: hootl
+- phase: operations
+- role: product-owner
+- alternatives:
+  1. Ручная проверка URL + GitHub Issues как канал обратной связи.
+  2. Внешний uptime-монитор (UptimeRobot, Better Uptime) + ручные Issues.
+  3. Sentry/Rollbar + window.onerror — полноценный error tracking.
+- choice: 1
+- rationale: статика, один оператор, pet-бюджет; внешние сервисы избыточны для MVP.
+- traces_to: [phases/operations/operations.md, .github/ISSUE_TEMPLATE/*]
+
+## 2026-04-23 19:01 — Процедура инцидентов и postmortem
+
+- context: как реагировать на сбои и документировать причины.
+- autonomy_mode: hootl
+- phase: operations
+- role: product-owner
+- alternatives:
+  1. git revert + 1-строчный postmortem в `decisions.md`.
+  2. Detailed Google Docs postmortem template (mid-уровень).
+  3. Автоматический rollback при E2E failure в CI.
+- choice: 1
+- rationale: пет-масштаб не требует тяжёлой процедуры; git — единственный источник правды.
+- traces_to: [phases/operations/operations.md]
+
+## 2026-04-23 19:02 — Каналы обратной связи через GitHub Issues
+
+- context: как получать обратную связь от пользователей.
+- autonomy_mode: hootl
+- phase: operations
+- role: product-owner
+- alternatives:
+  1. Issue templates (bug_report, feedback) + config.yml без пустых issues.
+  2. Discussions — форум-формат; требует активной модерации.
+  3. Email / Telegram — личные каналы; не open-source.
+- choice: 1
+- rationale: структурированный вход; лейблы для триажа; нулевой overhead.
+- traces_to: [.github/ISSUE_TEMPLATE/bug_report.md, .github/ISSUE_TEMPLATE/feedback.md, .github/ISSUE_TEMPLATE/config.yml]
+
+## 2026-04-23 19:03 — Продвижение трёх альф до pet-потолка
+
+- context: SDLC end-to-end завершён; прод работает, обратная связь подтверждена.
+- autonomy_mode: hootl
+- phase: operations
+- role: product-owner
+- alternatives:
+  1. Software System → Operational; Opportunity → Viable; Way of Working → In Use.
+  2. Удержать все три до длительного use (неделя+); преждевременный пессимизм.
+  3. Продвинуть Opportunity сразу до Addressed; нет external benefit accrual yet.
+- choice: 1
+- rationale: первый прод-run + подтверждение пользователя закрывают pet-потолок этих альф.
+- traces_to: [alphas.md, phases/operations/operations.md]

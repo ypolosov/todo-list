@@ -21,7 +21,7 @@ updated: 2026-04-23
 | development | pet | Линейная история изменений в одной основной ветке | Trunk-based на main + Conventional Commits + Semantic Versioning | hootl |
 | testing | mid | Пирамида автоматизированных тестов с покрытием как пороговым критерием | Unit + Integration + E2E • Coverage gate | hotl |
 | deployment | mid | Автоматизированный конвейер с несколькими средами и обратимой стратегией | GitHub Actions CI/CD + GitHub Pages | hotl |
-| operations | pet | — | — | hitl |
+| operations | pet | Пассивный сбор логов и внешняя проверка доступности | Uptime-мониторинг + GitHub Issues как канал обратной связи | hootl |
 
 Методы и инструменты выбираются при запуске `/sdlc-phase <name>`.
 
@@ -42,3 +42,4 @@ updated: 2026-04-23
 | 2026-04-23 | development | pet/hitl | pet/hootl, Trunk+ConvCommits+SemVer | выбор workflow и автономности |
 | 2026-04-23 | architecture | Vanilla TS | React 18 в adapters/ui | пересмотр UI-адаптера на фазе development |
 | 2026-04-23 | deployment | pet/hitl | mid/hotl, GitHub Actions + Pages | осознанный learning-upgrade до CI/CD |
+| 2026-04-23 | operations | pet/hitl | pet/hootl, ручная проверка + Issues | минимальная наблюдаемость; HOOTL для рутины |
