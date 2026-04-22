@@ -498,3 +498,171 @@ updated: 2026-04-22
 - choice: 1
 - rationale: инварианты, порт, слои и сценарии add/toggle/remove/filter исполнимы.
 - traces_to: [alphas.md, phases/development/development.md]
+
+## 2026-04-23 16:00 — Разблокировка инфраструктуры
+
+- context: npm install, playwright install, возврат jsdom/RTL/React-plugin.
+- autonomy_mode: hootl
+- phase: development
+- role: product-owner
+- alternatives:
+  1. Выполнить npm install и playwright install; восстановить vitest config.
+  2. Изолировать UI-разработку в другом репозитории без установки локально.
+  3. Отказаться от Playwright и ограничиться RTL-тестами.
+- choice: 1
+- rationale: локальная инфра обязательна для сквозного TDD-цикла UI+E2E.
+- traces_to: [package.json, vitest.config.ts, eslint.config.js, node_modules/]
+
+## 2026-04-23 16:30 — TDD для LocalStorageTaskRepository
+
+- context: port-адаптер persistence через Web Storage API.
+- autonomy_mode: hootl
+- phase: development
+- role: product-owner
+- alternatives:
+  1. Zod-схема + безопасный parse + fallback на пустой массив при повреждении.
+  2. JSON.parse без валидации — быстро, но ломается при повреждении или миграции.
+  3. Собственные парсеры без zod — переизобретение с меньшим покрытием кейсов.
+- choice: 1
+- rationale: двухслойная защита (JSON.parse + schema) соответствует architecture §3.6.
+- traces_to: [src/adapters/storage/*, tests/unit/adapters/storage/*]
+
+## 2026-04-23 17:00 — TDD UI через React Testing Library
+
+- context: user-centric тесты компонентов и контейнера.
+- autonomy_mode: hootl
+- phase: development
+- role: product-owner
+- alternatives:
+  1. RTL с user-event v14 — имитация реального взаимодействия.
+  2. Enzyme с shallow rendering — устарел, не рекомендуется для React 18.
+  3. Без тестов на UI, полагаться на E2E — нарушает coverage-план.
+- choice: 1
+- rationale: RTL фокусируется на поведении, не на реализации; подходит DDD/hexagonal.
+- traces_to: [tests/unit/adapters/ui/*, src/adapters/ui/*]
+
+## 2026-04-23 17:15 — Паттерн force-refresh в TodoApp
+
+- context: use cases мутируют репо; React не знает о новом состоянии без сигнала.
+- autonomy_mode: hootl
+- phase: development
+- role: product-owner
+- alternatives:
+  1. useState-счётчик version, bump() после каждой мутации; listQ.execute на каждом рендере.
+  2. Event bus / Observable repo — оверинжиниринг для pet.
+  3. useSyncExternalStore — требует реализации subscribe в репозитории, избыточно.
+- choice: 1
+- rationale: минимальная пара строк; соответствует pet-уровню простоты.
+- traces_to: [src/adapters/ui/TodoApp.tsx]
+
+## 2026-04-23 17:30 — Playwright E2E с webServer: build+preview
+
+- context: E2E должно работать против продакшн-бандла.
+- autonomy_mode: hootl
+- phase: development
+- role: product-owner
+- alternatives:
+  1. webServer `npm run build && npm run preview` на порту 4173.
+  2. webServer `npm run dev` (Vite dev-server) — не тестирует бандл.
+  3. Отдельный docker контейнер с nginx — оверхед для pet.
+- choice: 1
+- rationale: E2E ближе к реальному деплою; bundle отличается от dev-кода.
+- traces_to: [playwright.config.ts, tests/e2e/add-toggle-remove.spec.ts]
+
+## 2026-04-23 17:45 — Продвижение Software System до Usable
+
+- context: сквозной сценарий работает в реальном браузере с persistence.
+- autonomy_mode: hootl
+- phase: development
+- role: product-owner
+- alternatives:
+  1. Demonstrable → Usable: пользователь может реально использовать приложение.
+  2. Удержать на Demonstrable до первого внешнего пользователя.
+  3. Сразу Ready — требует deployment, пока не пройдено.
+- choice: 1
+- rationale: UI + E2E + persistence закрывают все US/NFR; Ready ждёт deployment.
+- traces_to: [alphas.md, phases/development/development.md, src/adapters/ui/*]
+
+## 2026-04-23 18:00 — Уровень SME на фазе deployment
+
+- context: GitHub Actions + Pages = mid-ряд матрицы (не pet `deploy.sh`).
+- autonomy_mode: hotl
+- phase: deployment
+- role: product-owner
+- alternatives:
+  1. Пометить deployment как mid (честно).
+  2. Оставить pet, задокументировать отклонение.
+  3. Упростить до pet: локальный `deploy.sh` без CI.
+- choice: 1
+- rationale: искренний уровень улучшает consistency-аудит; CI-опыт важен для learning.
+- traces_to: [profile.md, phases/deployment/deployment.md]
+
+## 2026-04-23 18:01 — Триггер workflow
+
+- context: как запускать деплой.
+- autonomy_mode: hotl
+- phase: deployment
+- role: product-owner
+- alternatives:
+  1. push в main (авто) + workflow_dispatch (ручной rollback/повтор).
+  2. Только workflow_dispatch — нет continuous delivery.
+  3. push тега v* — требует дисциплины тегирования.
+- choice: 1
+- rationale: continuous deployment из trunk; ручной вариант — страховка.
+- traces_to: [.github/workflows/deploy.yml]
+
+## 2026-04-23 18:02 — Стратегия rollback
+
+- context: как откатывать сломанную версию.
+- autonomy_mode: hotl
+- phase: deployment
+- role: product-owner
+- alternatives:
+  1. git revert + push — тот же pipeline редеплоит предыдущий код.
+  2. workflow_dispatch с input ref (SHA) — быстрее, но вне git-истории.
+  3. UI GitHub Pages rollback — непрозрачно, вне git.
+- choice: 1
+- rationale: git — единственный источник правды; прозрачная история.
+- traces_to: [phases/deployment/deployment.md]
+
+## 2026-04-23 18:03 — CI gate перед деплоем
+
+- context: что проверять перед публикацией артефакта.
+- autonomy_mode: hotl
+- phase: deployment
+- role: product-owner
+- alternatives:
+  1. lint + typecheck + unit + coverage + build; E2E отдельный workflow.
+  2. Всё включая E2E в одном pipeline — доп. время на установку chromium.
+  3. Только build — риск отправить сломанный код.
+- choice: 1
+- rationale: быстрая обратная связь на деплой; E2E параллельно не блокирует.
+- traces_to: [.github/workflows/deploy.yml, .github/workflows/e2e.yml]
+
+## 2026-04-23 18:04 — Добавление base-пути в vite.config.ts
+
+- context: GitHub Pages размещает проект по `/todo-list/`.
+- autonomy_mode: hotl
+- phase: deployment
+- role: product-owner
+- alternatives:
+  1. `base: '/todo-list/'` в vite.config.ts + обновить playwright baseURL.
+  2. Custom domain `CNAME` + root base `'/'` — требует домена.
+  3. Хардкодить через env-переменную — оверхед для pet.
+- choice: 1
+- rationale: минимальная правка; соответствует URL-схеме GitHub Pages.
+- traces_to: [vite.config.ts, playwright.config.ts, phases/architecture/architecture.md]
+
+## 2026-04-23 18:05 — Продвижение альф фазы Deployment
+
+- context: pipeline зафиксирован и локально верифицирован.
+- autonomy_mode: hotl
+- phase: deployment
+- role: product-owner
+- alternatives:
+  1. Software System: Usable → Ready; Work: Started → Under Control.
+  2. Удержать Software System на Usable до первого успешного run в CI.
+  3. Software System → Operational — преждевременно; нет факта прода.
+- choice: 1
+- rationale: pipeline валиден и воспроизводим локально; Operational ждёт реального run.
+- traces_to: [alphas.md, phases/deployment/deployment.md]

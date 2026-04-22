@@ -17,8 +17,8 @@ updated: 2026-04-23
 | Opportunity | Value Established | phases/vision/vision.md | 2026-04-22 |
 | Stakeholders | Involved | phases/requirements/requirements.md | 2026-04-22 |
 | Requirements | Acceptable | phases/testing/testing.md | 2026-04-22 |
-| Software System | Demonstrable | phases/development/development.md | 2026-04-23 |
-| Work | Started | phases/development/development.md | 2026-04-23 |
+| Software System | Ready | phases/deployment/deployment.md, .github/workflows/deploy.yml, .github/workflows/e2e.yml, vite.config.ts | 2026-04-23 |
+| Work | Under Control | phases/deployment/deployment.md, .github/workflows/deploy.yml, .github/workflows/e2e.yml, vite.config.ts | 2026-04-23 |
 | Team | Formed | roles.md | 2026-04-22 |
 | Way of Working | Foundation Established | profile.md, plugin-config.md | 2026-04-22 |
 
@@ -40,3 +40,6 @@ updated: 2026-04-23
 | 2026-04-22 | Work | Initiated | Prepared | phases/testing/testing.md |
 | 2026-04-23 | Work | Prepared | Started | phases/development/development.md |
 | 2026-04-23 | Software System | Architecture Selected | Demonstrable | phases/development/development.md |
+| 2026-04-23 | Software System | Demonstrable | Usable | phases/development/development.md, src/adapters/ui/**, tests/e2e/add-toggle-remove.spec.ts |
+| 2026-04-23 | Software System | Usable | Ready | phases/deployment/deployment.md, .github/workflows/deploy.yml, .github/workflows/e2e.yml, vite.config.ts |
+| 2026-04-23 | Work | Started | Under Control | phases/deployment/deployment.md, .github/workflows/deploy.yml, .github/workflows/e2e.yml, vite.config.ts |
