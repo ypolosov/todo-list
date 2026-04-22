@@ -5,6 +5,37 @@ project: todo-list
 updated: 2026-04-22
 ---
 
+## 2026-04-22 15:45 — Operations: сигналы, SLO, on-call, feedback
+
+- context: минимальный контур эксплуатации для pet-демо на GitHub Pages.
+- autonomy_mode: hitl
+- phase: operations
+- role: architect
+- alternatives:
+  1. Статус CI + ручной smoke + без SLO + best-effort on-call + issues/postmortem.
+  2. + uptime-мониторинг и SLO≥99%; требует внешний сервис.
+  3. Полный набор: uptime + Sentry + Plausible + формальная ротация.
+- choice: 1
+- rationale: pet-демо, нет пользователей со SLA; минимум достаточен.
+- feedback_channel: GitHub Issues с метками feedback:vision, feedback:requirements.
+- traces_to: [.claude/sdlc/phases/operations/plan.md, .claude/sdlc/alphas.md]
+
+## 2026-04-22 15:30 — Метод-инжиниринг: фаза operations
+
+- context: выбор метода и инструмента наблюдаемости для статического сайта todo-list на GitHub Pages.
+- autonomy_mode: hootl (AskUserQuestion недоступен в subagent; auto mode).
+- phase: operations
+- role: architect (sre/devops не назначены; архитектор покрывает интерес)
+- sme_level: pet
+- alternatives:
+  1. static-site-lightweight-ops + github-actions-runs+manual-check — статус деплоев через вкладку Actions, ручная проверка URL после релиза; ноль внешних сервисов.
+  2. static-site-lightweight-ops + uptimerobot+github-actions-runs — внешний uptime-мониторинг каждые 5 минут + Actions для деплоев; требует регистрации аккаунта.
+  3. observability-lite + sentry-browser+plausible — клиентский error-tracking и приватная аналитика; избыточно для demo без пользователей.
+- choice: 1
+- rationale: pet-демо; нет backend и пользователей; достаточно проверять статус последнего workflow run и доступность URL руками после merge.
+- scope: мониторинг сводится к (a) зелёному деплою в Actions, (b) доступности https://ypolosov.github.io/todo-list/, (c) ручной smoke-проверке localStorage-потока.
+- traces_to: [.claude/sdlc/profile.md, .claude/sdlc/phases/operations/plan.md]
+
 ## 2026-04-22 15:15 — Deployment: среды, стратегия, rollback
 
 - context: параметры CI/CD pipeline для todo-list.

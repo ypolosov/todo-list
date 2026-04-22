@@ -14,10 +14,10 @@ updated: 2026-04-22
 
 | Альфа | Состояние | Артефакт-свидетельство | Дата |
 |---|---|---|---|
-| Opportunity | Value Established | `phases/vision/lean-canvas.md` | 2026-04-22 |
+| Opportunity | Viable | `phases/operations/plan.md` + production URL | 2026-04-22 |
 | Stakeholders | Involved | `phases/requirements/todo.md` | 2026-04-22 |
 | Requirements | Addressed | `phases/testing/plan.md` | 2026-04-22 |
-| Software System | Ready | `phases/deployment/plan.md` + `.github/workflows/ci.yml` + `.github/workflows/deploy.yml` | 2026-04-22 |
+| Software System | Operational | `phases/operations/plan.md` + `.github/workflows/deploy.yml` | 2026-04-22 |
 | Work | Under Control | `phases/development/plan.md` | 2026-04-22 |
 | Team | Seeded | `roles.md` | 2026-04-22 |
 | Way of Working | Principles Established | `plugin-config.md` | 2026-04-22 |
@@ -42,3 +42,5 @@ updated: 2026-04-22
 | 2026-04-22 | Work | Initiated | Under Control | `phases/development/plan.md` |
 | 2026-04-22 | Requirements | Acceptable | Addressed | `phases/testing/plan.md` |
 | 2026-04-22 | Software System | Usable | Ready | `phases/deployment/plan.md` + `.github/workflows/ci.yml` + `.github/workflows/deploy.yml` |
+| 2026-04-22 | Software System | Ready | Operational | `phases/operations/plan.md` + `.github/workflows/deploy.yml` |
+| 2026-04-22 | Opportunity | Value Established | Viable | `phases/operations/plan.md` + production URL |

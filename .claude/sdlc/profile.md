@@ -4,6 +4,7 @@ type: sdlc-profile
 project: todo-list
 created: 2026-04-22
 updated: 2026-04-22
+
 ---
 
 # SME-профиль проекта todo-list
@@ -22,7 +23,7 @@ updated: 2026-04-22
 | development | pet | tdd-scaffolding | npm+tsx+prettier+eslint | hitl |
 | testing | pet | unit-testing-with-mocks | vitest | hitl |
 | deployment | pet | static-site-ci-cd | github-actions+github-pages | hitl |
-| operations | pet | — | — | hitl |
+| operations | pet | static-site-lightweight-ops | github-actions-runs+manual-check | hitl |
 
 Конкретный метод и инструмент выбираются `sdlc-method-engineering` на фазе.
 
@@ -41,3 +42,4 @@ updated: 2026-04-22
 | 2026-04-22 | testing | — | unit-testing-with-mocks + vitest | Метод-инжиниринг фазы testing в режиме HOOTL. |
 | 2026-04-22 | development | — | tdd-scaffolding + npm+tsx+prettier+eslint | Метод-инжиниринг фазы development в режиме HOOTL. |
 | 2026-04-22 | deployment | — | static-site-ci-cd + github-actions+github-pages | Метод-инжиниринг фазы deployment в режиме HOOTL. |
+| 2026-04-22 | operations | — | static-site-lightweight-ops + github-actions-runs+manual-check | Метод-инжиниринг фазы operations в режиме HOOTL. |
